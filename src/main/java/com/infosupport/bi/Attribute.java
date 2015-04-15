@@ -1,16 +1,15 @@
 package com.infosupport.bi;
 
 public class Attribute {
+
     private String name;
     private String dbName;
     private String tableName;
-    private String color;
-    
-    public Attribute(String name, String dbName, String tableName, String color) {
+
+    public Attribute(String name, String dbName, String tableName) {
         this.name = name;
         this.dbName = dbName;
         this.tableName = tableName;
-        this.color = color;
     }
 
     public String getName() {
@@ -25,9 +24,4 @@ public class Attribute {
         return tableName;
     }
 
-    public String getColor() {
-        return color;
-    }
-    
-    
 }

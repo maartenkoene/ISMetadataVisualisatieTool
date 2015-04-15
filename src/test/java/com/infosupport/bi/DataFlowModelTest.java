@@ -1,6 +1,9 @@
 package com.infosupport.bi;
 
 import java.util.List;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,30 +16,39 @@ public class DataFlowModelTest {
 
     @Before
     public void createVariables() {
-        source = new Attribute("AutoNaam", "Database2", "Auto", "Pink");
-        destination = new Attribute("VehicleName", "DatabWarehouse", "Vehicle", "Green");
+        source = new Attribute("AutoNaam", "Database2", "Auto");
+        destination = new Attribute("VehicleName", "DatabWarehouse", "Vehicle");
         modifier = new Modifier(source, "Addition", destination);
 
-    }
-
-    @Test
-    public void createSimpleDataFlow() {
+    }  
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void shouldOnlyCreateModifiersWithKnownDestinationAttribute() {
         DataFlow dataFlow = new DataFlow();
-        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car", "Blue");
-        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle", "Green");
-
-        Modifier firstModifier = dataFlow.addModifier(sourceAttribute, "multiplication", destinationAttribute);
-
-        dataFlow.addModifierToDataFlowList(firstModifier);
+        Attribute source = dataFlow.createAttribute("Autonaam", "Database", "Auto");
+        Attribute unknownDestination = new Attribute("VehicleName", "DataWarehouse", "Vehicle");
         
-        dataFlow.addModifierToDataFlowList(modifier);
-        
-                List<Modifier> modifiers;
-        modifiers = dataFlow.getModifiers();
+        dataFlow.addModifier(source, "multiplication", unknownDestination);
+    }
+    
+    @Test
+    public void shouldCreateModifiers() {
+        DataFlow dataFlow = new DataFlow();
+        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car");
+        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle");
 
-        for (Modifier row : modifiers) {
-            System.out.println(row.toString());
-        }
+        Modifier aModifier = dataFlow.addModifier(sourceAttribute, "multiplication", destinationAttribute);
+
+        assertThat(dataFlow.getModifiers(), hasItems(aModifier));
+    }
+    
+    @Test(expected=UnsupportedOperationException.class)
+    public void shouldNotBePossibleToChangeTheModifierList(){
+        DataFlow dataFlow = new DataFlow();
+        
+        List<Modifier> modifiers = dataFlow.getModifiers();
+        
+        modifiers.add(new Modifier(null, "a", null));
     }
 
 }
