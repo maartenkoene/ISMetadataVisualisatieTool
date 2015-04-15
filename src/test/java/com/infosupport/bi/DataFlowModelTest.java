@@ -1,22 +1,42 @@
 package com.infosupport.bi;
 
+import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 
 public class DataFlowModelTest {
-    @Test
-    public void createSimpleModifier() {
-        Attribute source = new Attribute();
-        Attribute destination = new Attribute();
 
-        Modifier modifier = new Modifier(source, "multiplication", destination);
+    private Modifier modifier;
+    private Attribute source;
+    private Attribute destination;
+    
+
+    @Before
+    public void createVariables() {
+        source = new Attribute("AutoNaam", "Database2", "Auto", "Pink");
+        destination = new Attribute("VehicleName", "DatabWarehouse", "Vehicle", "Green");
+        modifier = new Modifier(source, "Addition", destination);
+
     }
 
     @Test
     public void createSimpleDataFlow() {
         DataFlow dataFlow = new DataFlow();
-        Attribute source = dataFlow.createAttribute();
-        Attribute destination = dataFlow.createAttribute();
+        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car", "Blue");
+        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle", "Green");
 
-        dataFlow.addModifier(source, "multiplication", destination);
+        Modifier firstModifier = dataFlow.addModifier(sourceAttribute, "multiplication", destinationAttribute);
+
+        dataFlow.addModifierToDataFlowList(firstModifier);
+        
+        dataFlow.addModifierToDataFlowList(modifier);
+        
+                List<Modifier> modifiers;
+        modifiers = dataFlow.getModifiers();
+
+        for (Modifier row : modifiers) {
+            System.out.println(row.toString());
+        }
     }
+
 }
