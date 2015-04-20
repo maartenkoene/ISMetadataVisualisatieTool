@@ -9,15 +9,10 @@ public class DataFlow {
 
     private List<Attribute> attributes = new ArrayList<Attribute>();
     private List<Modifier> modifiers = new ArrayList<Modifier>();
+    
     private MSSQLQuery queryBuilder;
-
-    public DataFlow(String dbString, String username, String password) {
-        queryBuilder = new MSSQLQuery(dbString, username, password);
-    }
-
     public DataFlow() {
     }
-    
 
     public Attribute createAttribute(String name, String dbName, String tableName) {
 
@@ -39,23 +34,20 @@ public class DataFlow {
         return Collections.unmodifiableList(modifiers);
     }
 
-    public List<Modifier> createDataflow(int mappingSetId) {
-
-        ResultSet rs = queryBuilder.getMappings(mappingSetId);
+    public void createDataflow(ResultSet rs) {
 
         try {
             while (rs.next()) {
 
-                Attribute source = this.createAttribute(rs.getString(3), null, null);
-                Attribute destination = this.createAttribute(rs.getString(7), null, null);
-                this.addModifier(source, rs.getString(4), destination);
+                Attribute source = this.createAttribute(rs.getString(9),rs.getString(11) , rs.getString(10));
+                Attribute destination = this.createAttribute(rs.getString(3), rs.getString(5), rs.getString(4));
+                this.addModifier(source, rs.getString(6), destination);
 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return this.getModifiers();
     }
 
 }

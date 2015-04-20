@@ -84,10 +84,10 @@ public class MSSQLQuery {
             statement = connection.createStatement();
 
             String query = "SELECT Dest.MappingID, "
-                    + "Dest.DestinationAttributeID, "
-                    + "DestAttr.Name, Dest.Transformation, "
-                    + "Src.MappingID, Src.SourceAttributeID, "
-                    + "SrcAttr.Name "
+                    + "Dest.DestinationAttributeID, DestAttr.Name, "
+                    + "DTabel.Name, DDatabase.Name, Dest.Transformation, "
+                    + "Src.MappingID, Src.SourceAttributeID, SrcAttr.Name, "
+                    + "STabel.Name,SDatabase.Name "
                     + "FROM ISMetadata.ismd.MappingMappingSet MMS "
                     + "LEFT JOIN ISMetadata.ismd.Mapping Dest "
                     + "ON MMS.MappingID = Dest.MappingID "
@@ -95,9 +95,18 @@ public class MSSQLQuery {
                     + "ON Src.MappingID = MMS.MappingID "
                     + "LEFT JOIN ISMetadata.ismd.Attribute DestAttr "
                     + "ON Dest.DestinationAttributeID = DestAttr.AttributeID "
+                    + "LEFT JOIN ISMetadata.ismd.Entity DTabel "
+                    + "ON DestAttr.EntityID = DTabel.EntityID "
+                    + "LEFT JOIN ISMetadata.ismd.DataModel DDatabase "
+                    + "ON DTabel.DataModelID = DDatabase.DataModelID "
                     + "LEFT JOIN ISMetadata.ismd.Attribute SrcAttr "
                     + "ON Src.SourceAttributeID = SrcAttr.AttributeID "
-                    + "WHERE MappingSetID =" + mappingSetId;
+                    + "LEFT JOIN ISMetadata.ismd.Entity STabel "
+                    + "ON SrcAttr.EntityID = STabel.EntityID "
+                    + "LEFT JOIN ISMetadata.ismd.DataModel SDatabase "
+                    + "ON STabel.DataModelID = SDatabase.DataModelID "
+                    + "WHERE MappingSetID = " + mappingSetId;
+;
 
             rs = statement.executeQuery(query);
 
