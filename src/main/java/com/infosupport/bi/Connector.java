@@ -25,27 +25,29 @@ public class Connector {
      * @param username Visualisation
      * @param password Info2015
      */
-    public Connection dbConnect(String connect, String username, String password) {
+    public Connector(String connect, String username, String password) {
+        this.dbConnect = connect;
+        this.dbUsername = username;
+        this.dbPassword = password;
+    }
 
-        if ((connect != null || username != null || password != null)) {
-            this.dbConnect = connect;
-            this.dbUsername = username;
-            this.dbPassword = password;
+    public Connection dbConnect() {
 
-            try {
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                conn = DriverManager.getConnection(dbConnect, dbUsername, dbPassword);
-                System.out.println("Connected");
-                
-                return conn;
-            } catch (Exception e) {
-                System.out.println("Niet Connected");
-                e.printStackTrace();
-                return null;
-            }
-        } else {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            conn = DriverManager.getConnection(dbConnect, dbUsername, dbPassword);
+            System.out.println("Connected");
+
+            return conn;
+        } catch (Exception e) {
+            System.out.println("Niet Connected");
+            e.printStackTrace();
             return null;
         }
     }
-    
+
+    public Connection getConn() {
+        return conn;
+    }
+
 }

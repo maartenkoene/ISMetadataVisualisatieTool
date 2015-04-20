@@ -7,7 +7,8 @@ package com.infosupport.bi;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,53 +21,80 @@ public class DatabaseConnectionTest {
     private String connect;
     private String username;
     private String password;
+    private int dataModelId;
+    private int mappingSetId;
 
     @Before
     public void databaseVariables() {
         connect = "jdbc:sqlserver://127.0.0.1:1433;databaseName=ISMetadata;integratedSecurity=true;";
         username = "Visualisation";
         password = "Info2015";
+        dataModelId = 5;
+        mappingSetId = 1;
     }
 
     @Test
     public void testConnection() {
-        Connector conn = new Connector();
-        Statement statement;
-        Connection connection = conn.dbConnect(connect, username, password);
+        Connector conn = new Connector(connect, username, password);
+        Connection connection = conn.dbConnect();
+
+        assertNotNull("Connection faalt", connection);
+    }
+
+    @Test
+    public void testGetSystems() {
+        MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
+
+        ResultSet rs = mssqlQuery.getSystems();
 
         try {
-            statement = connection.createStatement();
-            String queryString = "SELECT [MappingSetID], [DestinationVersionID], [Name], [Description],[MappingVersion] FROM [ISMetadata].[ismd].[MappingSet] WHERE [DestinationVersionID] = 5";
-            ResultSet rs = statement.executeQuery(queryString);
-
             while (rs.next()) {
-                System.out.println(rs.getString(1));
-                System.out.println(rs.getString(2));
-                System.out.println(rs.getString(3));
+                //       System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Query faalt");
         }
 
+        assertNotNull("Geen systemen op gehaald", rs);
+
+    }
+
+    @Test
+    public void testGetMappingSets() {
+        MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
+
+        ResultSet rs = mssqlQuery.getMappingSets(dataModelId);
+
         try {
-            statement = connection.createStatement();
-            String queryString = "SELECT [DataModelID]"
-                    + "      ,[DataModelTypeID]"
-                    + "      ,[Name]"
-                    + "      ,[DatabaseName]"
-                    + "      ,[Description]"
-                    + "  FROM [ISMetadata].[ismd].[DataModel]";
-            ResultSet rs = statement.executeQuery(queryString);
-
             while (rs.next()) {
-                System.out.println(rs.getString(1)+ " "+rs.getString(2)+ " "+rs.getString(3)+ " "+rs.getString(4));
+                //     System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Query faalt");
         }
+
+        assertNotNull("Geen mappings opgehaald", rs);
+
+    }
+
+    @Test
+    public void testGetMappings() {
+        MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
+
+        ResultSet rs = mssqlQuery.getMappings(mappingSetId);
+
+        try {
+            while (rs.next()) {
+            //       System.out.println(rs.getString(3) + " " + rs.getString(4) + " " + rs.getString(7));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Query faalt");
+        }
+        
+        assertNotNull("Geen mappings opgehaald", rs);
+
     }
 }
