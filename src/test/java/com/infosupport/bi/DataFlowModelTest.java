@@ -1,5 +1,6 @@
 package com.infosupport.bi;
 
+import java.sql.ResultSet;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertNotNull;
@@ -15,6 +16,7 @@ public class DataFlowModelTest {
     private String username;
     private String password;
     private int mappingSetId;
+    private int dataModelId;
 
     @Before
     public void createVariables() {
@@ -24,6 +26,7 @@ public class DataFlowModelTest {
         username = "Visualisation";
         password = "Info2015";
         mappingSetId = 1;
+        dataModelId = 5;
 
     }
 
@@ -60,12 +63,13 @@ public class DataFlowModelTest {
     public void createDataFlowFromDB() {
         DataFlowHandler dataflowhandler = new DataFlowHandler(connect, username, password);
 
-        dataflowhandler.createMappingList(mappingSetId);
+        ResultSet tijdelijk = dataflowhandler.getMappingSets(dataModelId);
+        dataflowhandler.createMappingList(tijdelijk);
 
         dataflowhandler.getDataFlow();
         
         for(Modifier temp : dataflowhandler.getDataFlow()){
-            System.out.println(temp.toString());
+        //    System.out.println(temp.toString());
         }
 
         assertNotNull("Dataflow is leeg",dataflowhandler.getDataFlow());

@@ -10,7 +10,6 @@ public class DataFlow {
     private List<Attribute> attributes = new ArrayList<Attribute>();
     private List<Modifier> modifiers = new ArrayList<Modifier>();
     
-    private MSSQLQuery queryBuilder;
     public DataFlow() {
     }
 

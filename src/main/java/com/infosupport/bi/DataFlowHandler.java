@@ -22,14 +22,32 @@ public class DataFlowHandler {
         dataFlow = new DataFlow();
     }
 
-    public void createMappingList(int mappingSetId) {
-        ResultSet rs = queryhandler.getMappings(mappingSetId);
+    public List<Modifier> getDataFlow() {
 
-        dataFlow.createDataflow(rs);
+        return dataFlow.getModifiers();
     }
 
-    public List<Modifier> getDataFlow() {
-        return dataFlow.getModifiers();
+    public ResultSet getSystems() {
+
+        return queryhandler.getSystems();
+    }
+
+    public void createMappingList(ResultSet rs) {
+
+                try {
+            while (rs.next()) {
+                ResultSet result = queryhandler.getMappings(rs.getInt(1));
+                dataFlow.createDataflow(result);
+            }
+        } catch (Exception e) {
+            System.out.println("Kan geen mappinglist maken");
+        }
+        
+    }
+
+    public ResultSet getMappingSets(int dataModel) {
+
+        return queryhandler.getMappingSets(dataModel);
     }
 
 }
