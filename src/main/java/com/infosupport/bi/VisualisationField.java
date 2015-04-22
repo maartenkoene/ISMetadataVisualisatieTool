@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -47,6 +48,7 @@ public class VisualisationField {
         JToolBar toolbar = new JToolBar();
         toolbar.setMargin(new Insets(5, 5, 5, 5));
         toolbar.setLayout(new FlowLayout(5));
+        toolbar.setFloatable(false);
 
         //aanmaken combobox met de beschikbare systemen
         final JComboBox systems = new JComboBox();
@@ -59,8 +61,8 @@ public class VisualisationField {
             e.printStackTrace();
             System.out.println("Query faalt");
         }
-        
         //toevoegen van comboxbox aan toolbar
+         toolbar.add(new JLabel("Systemen:"));
          toolbar.add(systems);
 
         //toevoegen van de toolbar aan het frame bovenin

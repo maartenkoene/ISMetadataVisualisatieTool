@@ -20,6 +20,13 @@
             <artifactId>sqljdbc4</artifactId>
             <version>4.0</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.codeartisans.thirdparties.swing</groupId>
+            <artifactId>org-netbeans-api-visual</artifactId>
+            <version>2.23.1</version>
+        </dependency>
+        
     </dependencies>
     <name>ISMetadataVisualisationTool</name>
 </project>
