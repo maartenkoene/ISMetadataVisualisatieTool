@@ -56,6 +56,7 @@ public class VisualisationField {
                 try {
             while (availableSystems.next()) {
                systems.addItem(availableSystems.getString(4));
+               
             }
         } catch (Exception e) {
             e.printStackTrace();

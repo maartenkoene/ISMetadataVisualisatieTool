@@ -87,7 +87,7 @@ public class DatabaseConnectionTest {
 
         try {
             while (rs.next()) {
-            //       System.out.println(rs.getString(3) + " " + rs.getString(5) + " " + rs.getString(7));
+                //   System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
             }
         } catch (Exception e) {
             e.printStackTrace();
