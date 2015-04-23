@@ -15,11 +15,11 @@ public class Modifier {
     public String toString(){
     StringBuilder result = new StringBuilder();
     
-    result.append("SourceName: " + this.source.getName() + " ");
-    result.append("SourceDB: " + this.source.getDbName()+ " ");
-    result.append("Transformation: " + this.transformation+ " ");
-    result.append("DestinationName: " + this.destination.getName()+ " ");
-    result.append("DestinationDB: "+ this.destination.getDbName()+ " ");
+    result.append("SourceName: ").append(this.source.getName()).append(" ");
+    result.append("SourceDB: " ).append(this.source.getDbName()).append(" ");
+    result.append("Transformation: ").append(this.transformation).append(" ");
+    result.append("DestinationName: ").append(this.destination.getName()).append(" ");
+    result.append("DestinationDB: ").append(this.destination.getDbName()).append(" ");
     
     return result.toString();
     }

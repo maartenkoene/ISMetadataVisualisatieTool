@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -59,8 +60,7 @@ public class VisualisationField {
                
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Query faalt");
+            JOptionPane.showMessageDialog(null, "Er kan geen connectie worden gemaakt met de database", "Interne fout",JOptionPane.ERROR_MESSAGE);
         }
         //toevoegen van comboxbox aan toolbar
          toolbar.add(new JLabel("Systemen:"));

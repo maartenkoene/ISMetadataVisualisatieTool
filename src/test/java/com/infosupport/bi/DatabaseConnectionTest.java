@@ -7,8 +7,8 @@ package com.infosupport.bi;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import junit.framework.Assert;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -52,8 +52,7 @@ public class DatabaseConnectionTest {
                 //       System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Query faalt");
+            Assert.fail("Query faalt");
         }
 
         assertNotNull("Geen systemen op gehaald", rs);
@@ -71,8 +70,7 @@ public class DatabaseConnectionTest {
                 //     System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Query faalt");
+            Assert.fail("Query faalt");
         }
 
         assertNotNull("Geen mappings opgehaald", rs);
@@ -87,13 +85,12 @@ public class DatabaseConnectionTest {
 
         try {
             while (rs.next()) {
-                //   System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
+                System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Query faalt");
+            Assert.fail("Query faalt");
         }
-        
+
         assertNotNull("Geen mappings opgehaald", rs);
 
     }

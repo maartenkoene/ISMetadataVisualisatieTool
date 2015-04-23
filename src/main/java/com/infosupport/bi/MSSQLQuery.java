@@ -6,6 +6,7 @@
 package com.infosupport.bi;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -25,20 +26,18 @@ public class MSSQLQuery {
 
     public ResultSet getSystems() {
 
-        Statement statement;
+        PreparedStatement statement;
         ResultSet rs = null;
 
         try {
-            statement = connection.createStatement();
-
-            String query = "SELECT [DataModelID],"
+            statement = connection.prepareStatement("SELECT [DataModelID],"
                     + "[DataModelTypeID],"
                     + "[Name],"
                     + "[DatabaseName],"
                     + "[Description] "
-                    + "FROM [ISMetadata].[ismd].[DataModel]";
+                    + "FROM [ISMetadata].[ismd].[DataModel]");
 
-            rs = statement.executeQuery(query);
+            rs = statement.executeQuery();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,20 +49,19 @@ public class MSSQLQuery {
 
     public ResultSet getMappingSets(int dataModel) {
 
-        Statement statement;
+        PreparedStatement statement;
         ResultSet rs = null;
         String dataModelID = Integer.toString(dataModel);
 
         try {
-            statement = connection.createStatement();
-
-            String query = "SELECT [MappingSetID],"
+            statement = connection.prepareStatement("SELECT [MappingSetID],"
                     + "[DestinationVersionID],[Name],"
                     + "[Description],[MappingVersion] "
                     + "FROM [ISMetadata].[ismd].[MappingSet]"
-                    + "WHERE [DestinationVersionID] =" + dataModelID;
+                    + "WHERE [DestinationVersionID] =?");
+            statement.setString(1, dataModelID);
 
-            rs = statement.executeQuery(query);
+            rs = statement.executeQuery();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,14 +74,12 @@ public class MSSQLQuery {
     
     public ResultSet getMappings(int MappingSet){
     
-        Statement statement;
+        PreparedStatement statement;
         ResultSet rs = null;
         String mappingSetId= Integer.toString(MappingSet);
         
                 try {
-            statement = connection.createStatement();
-
-            String query = "SELECT Dest.MappingID, "
+            statement = connection.prepareStatement("SELECT Dest.MappingID, "
                     + "Dest.DestinationAttributeID, DestAttr.Name, "
                     + "DTabel.Name, DDatabase.Name, Dest.Transformation, "
                     + "Src.MappingID, Src.SourceAttributeID, SrcAttr.Name, "
@@ -105,10 +101,11 @@ public class MSSQLQuery {
                     + "ON SrcAttr.EntityID = STabel.EntityID "
                     + "LEFT JOIN ISMetadata.ismd.DataModel SDatabase "
                     + "ON STabel.DataModelID = SDatabase.DataModelID "
-                    + "WHERE MappingSetID = " + mappingSetId;
-;
+                    + "WHERE MappingSetID =?");
 
-            rs = statement.executeQuery(query);
+            statement.setString(1, mappingSetId);
+
+            rs = statement.executeQuery();
 
         } catch (Exception e) {
             e.printStackTrace();

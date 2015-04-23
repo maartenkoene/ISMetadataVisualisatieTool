@@ -23,7 +23,7 @@ public class Connector {
      *
      * @param connect
      * @param username Visualisation
-     * @param password Info2015
+     * @param password Info2014
      */
     public Connector(String connect, String username, String password) {
         this.dbConnect = connect;
