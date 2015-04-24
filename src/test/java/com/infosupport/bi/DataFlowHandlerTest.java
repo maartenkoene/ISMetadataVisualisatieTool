@@ -38,10 +38,12 @@ public class DataFlowHandlerTest {
         ResultSet tijdelijk = dataflowhandler.getMappingSets(dataModelId);
         dataflowhandler.createMappingList(tijdelijk);
 
-        for (Modifier temp : dataflowhandler.getDataFlow()) {
-            //    System.out.println(temp.toString());
-        }
+    //    for (DestinationAttribute temp : dataflowhandler.getDataFlow()) {
+    //        System.out.println(temp.toString());
+    //    }
 
+    //    System.out.println(dataflowhandler.getDataFlow().size());
         assertNotNull("Dataflow is leeg", dataflowhandler.getDataFlow());
     }
+
 }

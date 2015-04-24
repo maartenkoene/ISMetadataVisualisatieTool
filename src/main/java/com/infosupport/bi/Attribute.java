@@ -24,4 +24,8 @@ public class Attribute {
         return tableName;
     }
 
+    public boolean compareAttributes(Attribute aNewAttribute) {
+        return this.name.equals(aNewAttribute.name) && this.dbName.equals(aNewAttribute.dbName) && this.tableName.equals(aNewAttribute.tableName);
+    }
+
 }

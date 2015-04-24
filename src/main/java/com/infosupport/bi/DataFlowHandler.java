@@ -22,9 +22,9 @@ public class DataFlowHandler {
         dataFlow = new DataFlow();
     }
 
-    public List<Modifier> getDataFlow() {
+    public List<DestinationAttribute> getDataFlow() {
 
-        return dataFlow.getModifiers();
+        return dataFlow.getDestinations();
     }
 
     public ResultSet getSystems() {
