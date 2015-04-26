@@ -8,6 +8,7 @@ import java.util.List;
 public class DataFlow {
 
     private List<DestinationAttribute> destinations;
+    private int foundDestinationNumber;
 
     public DataFlow() {
         destinations = new ArrayList<DestinationAttribute>();
@@ -24,29 +25,27 @@ public class DataFlow {
             DestinationAttribute destinationAttr = new DestinationAttribute(source, transformation, destination);
             destinations.add(destinationAttr);
         } else {
-            int destinationNumber = this.loopThroughDestinations(transformation, destination);
-            if (destinationNumber == 10000) {
+            boolean destinationNumber = this.loopThroughDestinations(transformation, destination);
+            if (destinationNumber == true) {
+                destinations.get(foundDestinationNumber).AddSource(source);
+            } else {
                 DestinationAttribute destinationAttr = new DestinationAttribute(source, transformation, destination);
                 destinations.add(destinationAttr);
-            } else {
-                destinations.get(destinationNumber).AddSource(source);
             }
         }
     }
 
-    public int loopThroughDestinations(String transformation, Attribute destination) {
-        int result = 10000;
+    public boolean loopThroughDestinations(String transformation, Attribute destination) {
         int i;
+        boolean found = false;
         for (i = 0; i < destinations.size(); i++) {
             if (destinations.get(i).compareDestinations(destination, transformation)) {
-                result = i;
+                foundDestinationNumber = i;
+                found = true;
                 break;
-            } else {
-                result = 10000;
             }
-
         }
-        return result;
+        return found;
     }
 
     public List<DestinationAttribute> getDestinations() {
