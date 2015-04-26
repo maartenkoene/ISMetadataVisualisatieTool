@@ -39,10 +39,10 @@ public class DataFlowHandlerTest {
         dataflowhandler.createMappingList(tijdelijk);
 
     //    for (DestinationAttribute temp : dataflowhandler.getDataFlow()) {
-    //        System.out.println(temp.toString());
-    //    }
-
-    //    System.out.println(dataflowhandler.getDataFlow().size());
+        //        System.out.println(temp.toString());
+        //    }
+//
+        //    System.out.println(dataflowhandler.getDataFlow().size());   
         assertNotNull("Dataflow is leeg", dataflowhandler.getDataFlow());
     }
 

@@ -18,8 +18,7 @@ public class DataFlowHandler {
     private MSSQLQuery queryhandler;
 
     public DataFlowHandler(String dbString, String username, String password) {
-        queryhandler = new MSSQLQuery(dbString, username, password);
-        dataFlow = new DataFlow();
+        queryhandler = new MSSQLQuery(dbString, username, password);    
     }
 
     public List<DestinationAttribute> getDataFlow() {
@@ -33,7 +32,7 @@ public class DataFlowHandler {
     }
 
     public void createMappingList(ResultSet rs) {
-
+         dataFlow = new DataFlow();
                 try {
             while (rs.next()) {
                 ResultSet result = queryhandler.getMappings(rs.getInt(1));
