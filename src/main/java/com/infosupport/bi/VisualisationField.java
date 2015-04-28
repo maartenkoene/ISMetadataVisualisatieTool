@@ -43,13 +43,12 @@ public class VisualisationField extends JPanel {
         username = "Visualisation";
         password = "Info2015";
         dataflowhandler = new DataFlowHandler(connect, username, password);
-        datamodelID = 6;
         initComponents();
     }
 
     private void initComponents() {
         setLayout(new BorderLayout());
-        JScrollPane scrollPane = new JScrollPane();
+        final JScrollPane scrollPane = new JScrollPane();
 
         //aanmaken van de toolbar 
         JToolBar toolbar = new JToolBar();
@@ -63,7 +62,6 @@ public class VisualisationField extends JPanel {
         try {
             while (availableSystems.next()) {
                 systems.addItem(new ComboboxItem(availableSystems.getInt(1), availableSystems.getString(4)));
-
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Er kan geen connectie worden gemaakt met de database", "Interne fout", JOptionPane.ERROR_MESSAGE);
@@ -77,6 +75,9 @@ public class VisualisationField extends JPanel {
                 datamodelID = datamodel.getId();
                 ResultSet mappings = dataflowhandler.getMappingSets(datamodelID);
                 dataflowhandler.createMappingList(mappings);
+                List<DestinationAttribute> dataflow = dataflowhandler.getDataFlow();
+                GraphScene scene = new GraphSceneImpl(dataflow);
+                scrollPane.setViewportView(scene.createView());
             }
         });
         
@@ -87,6 +88,7 @@ public class VisualisationField extends JPanel {
         //toevoegen van de components aan het frame bovenin
         add(toolbar, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+        
 
         ResultSet mappings = dataflowhandler.getMappingSets(datamodelID);
         dataflowhandler.createMappingList(mappings);
