@@ -61,10 +61,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
             Widget destination = addNode(destinationAttrName);
             destination.setPreferredLocation(new Point(xdestination, y));
 
-            ConnectionWidget transDestConn = new ConnectionWidget(this);
-            transDestConn.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
-            transDestConn.setSourceAnchor(AnchorFactory.createRectangularAnchor(transformation));
-            transDestConn.setTargetAnchor(AnchorFactory.createRectangularAnchor(destination));
+            ConnectionWidget transDestConn = this.createConnection(transformation, destination);
             connectionLayer.addChild(transDestConn);
             int ySource = y;
             for (Attribute sourceAttr : dataflow.get(i).getSourceAttributes()) {
@@ -75,10 +72,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
                 Widget source = addNode(sourceAttrName);
                 source.setPreferredLocation(new Point(xsource, ySource));
 
-                ConnectionWidget sourceTrans = new ConnectionWidget(this);
-                sourceTrans.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
-                sourceTrans.setSourceAnchor(AnchorFactory.createRectangularAnchor(source));
-                sourceTrans.setTargetAnchor(AnchorFactory.createRectangularAnchor(transformation));
+                ConnectionWidget sourceTrans = this.createConnection(source, transformation);
                 connectionLayer.addChild(sourceTrans);
                 ySource += 20;
             }
@@ -88,6 +82,14 @@ public class GraphSceneImpl extends GraphScene<String, String> {
         }
 
         getActions().addAction(ActionFactory.createZoomAction());
+    }
+
+    private ConnectionWidget createConnection(Widget source, Widget destination) {
+        ConnectionWidget connection = new ConnectionWidget(this);
+        connection.setTargetAnchorShape(AnchorShape.TRIANGLE_FILLED);
+        connection.setSourceAnchor(AnchorFactory.createRectangularAnchor(source));
+        connection.setTargetAnchor(AnchorFactory.createRectangularAnchor(destination));
+        return connection;
     }
 
     @Override
