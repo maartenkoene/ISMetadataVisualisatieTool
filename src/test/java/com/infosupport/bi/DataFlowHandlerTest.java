@@ -42,8 +42,9 @@ public class DataFlowHandlerTest {
         //        System.out.println(temp.toString());
         //    }
 //
-        //    System.out.println(dataflowhandler.getDataFlow().size());   
+        //    System.out.println(dataflowhandler.getDataFlow().size());
         assertNotNull("Dataflow is leeg", dataflowhandler.getDataFlow());
+
     }
 
 }

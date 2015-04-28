@@ -23,6 +23,14 @@ public class DestinationAttribute {
         return transformation;
     }
 
+    public Attribute getDestination() {
+        return destination;
+    }
+
+    public List<Attribute> getSourceAttributes() {
+        return sourceAttributes;
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
