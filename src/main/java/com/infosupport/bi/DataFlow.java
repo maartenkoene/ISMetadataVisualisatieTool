@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DataFlow {
 
-    private List<DestinationAttribute> destinations;
+    private final List<DestinationAttribute> destinations;
     private int foundDestinationNumber;
 
     public DataFlow() {

@@ -2,9 +2,9 @@ package com.infosupport.bi;
 
 public class Attribute {
 
-    private String name;
-    private String dbName;
-    private String tableName;
+    private final String name;
+    private final String dbName;
+    private final String tableName;
 
     public Attribute(String name, String dbName, String tableName) {
         this.name = name;

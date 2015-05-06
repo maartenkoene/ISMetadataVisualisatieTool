@@ -10,8 +10,8 @@ package com.infosupport.bi;
  * @author MaartenKo
  */
 public class ComboboxItem {
-    int id;
-    String name;
+    private final int id;
+    private final String name;
 
     public ComboboxItem(int id, String name) {
         this.id = id;

@@ -15,7 +15,7 @@ import java.util.List;
 public class DataFlowHandler {
 
     private DataFlow dataFlow;
-    private MSSQLQuery queryhandler;
+    private final MSSQLQuery queryhandler;
 
     public DataFlowHandler(String dbString, String username, String password) {
         queryhandler = new MSSQLQuery(dbString, username, password);    

@@ -14,9 +14,9 @@ import java.sql.DriverManager;
  */
 public class Connector {
 
-    private String dbConnect;
-    private String dbUsername;
-    private String dbPassword;
+    private final String dbConnect;
+    private final String dbUsername;
+    private final String dbPassword;
     private Connection conn;
 
     /**

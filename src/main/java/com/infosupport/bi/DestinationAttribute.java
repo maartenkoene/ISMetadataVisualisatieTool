@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DestinationAttribute {
 
-    private List<Attribute> sourceAttributes = new ArrayList<Attribute>();
+    private final List<Attribute> sourceAttributes = new ArrayList<Attribute>();
     private final String transformation;
     private final Attribute destination;
 

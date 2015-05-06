@@ -32,10 +32,10 @@ import org.netbeans.api.visual.graph.GraphScene;
  */
 public class VisualisationField extends JPanel {
 
-    private String connect;
-    private String username;
-    private String password;
-    private DataFlowHandler dataflowhandler;
+    private final String connect;
+    private final String username;
+    private final String password;
+    private final DataFlowHandler dataflowhandler;
     private int datamodelID;
 
     public VisualisationField() {

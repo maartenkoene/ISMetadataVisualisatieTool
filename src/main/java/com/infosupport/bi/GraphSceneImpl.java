@@ -23,9 +23,9 @@ import org.netbeans.api.visual.widget.Widget;
  */
 public class GraphSceneImpl extends GraphScene<String, String> {
 
-    private LayerWidget mainLayer;
-    private LayerWidget connectionLayer;
-    private LayerWidget interactionLayer;
+    private final LayerWidget mainLayer;
+    private final LayerWidget connectionLayer;
+    private final LayerWidget interactionLayer;
 
     public GraphSceneImpl(List<DestinationAttribute> dataflow) {
         mainLayer = new LayerWidget(this);
