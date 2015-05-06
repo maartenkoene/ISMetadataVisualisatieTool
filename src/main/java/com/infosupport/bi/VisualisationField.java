@@ -67,7 +67,6 @@ public class VisualisationField extends JPanel {
             JOptionPane.showMessageDialog(null, "Er kan geen connectie worden gemaakt met de database", "Interne fout", JOptionPane.ERROR_MESSAGE);
         }
         
-        //Work in progress
         systems.addActionListener(new ActionListener(){
 
             public void actionPerformed(ActionEvent ae) {
