@@ -1,6 +1,5 @@
 package com.infosupport.bi;
 
-import java.util.List;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -27,8 +26,8 @@ public class DataFlowModelTest {
     @Test
     public void compareShouldBeTrue() {
         DataFlow dataFlow = new DataFlow();
-        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car");
-        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle");
+        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car", 1, 1);
+        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle",2,2);
         DestinationAttribute destination = new DestinationAttribute(sourceAttribute, "something",destinationAttribute);
         
         
@@ -39,12 +38,12 @@ public class DataFlowModelTest {
        @Test
     public void destinationWithMultipleSources(){
         DataFlow dataFlow = new DataFlow();
-        Attribute source1 = dataFlow.createAttribute("Autonaam", "Database", "Auto");
-        Attribute source2 = dataFlow.createAttribute("carName", "Database1", "Car");
-        Attribute source3 = dataFlow.createAttribute("fiets", "Datab", "fietsen");
+        Attribute source1 = dataFlow.createAttribute("Autonaam", "Database", "Auto",1,2);
+        Attribute source2 = dataFlow.createAttribute("carName", "Database1", "Car",3,4);
+        Attribute source3 = dataFlow.createAttribute("fiets", "Datab", "fietsen",5,6);
         
-        Attribute destination = dataFlow.createAttribute("Autonaam", "Database", "Auto");
-        Attribute destination2 = dataFlow.createAttribute("FietsID", "DataW", "Fiets");
+        Attribute destination = dataFlow.createAttribute("Autonaam", "Database", "Auto",7,8);
+        Attribute destination2 = dataFlow.createAttribute("FietsID", "DataW", "Fiets",9,10);
 
         dataFlow.createDestination(source1, "add", destination);
         dataFlow.createDestination(source3, null, destination2);

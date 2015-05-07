@@ -39,12 +39,15 @@ public class DestinationAttribute {
         while (i < sourceAttributes.size()) {
             result.append("SourceName").append(i).append(": ").append(sourceAttributes.get(i).getName()).append(" ");
             result.append("SourceDB").append(i).append(": ").append(sourceAttributes.get(i).getDbName()).append(" ");
+            result.append("AttribuutID").append(i).append(": ").append(sourceAttributes.get(i).getAttributeID()).append(" ");
+            result.append("MappingID").append(i).append(": ").append(sourceAttributes.get(i).getMappingID()).append(" ");
             i++;
         }
         result.append("Transformation: ").append(this.transformation).append(" ");
         result.append("DestinationName: ").append(this.destination.getName()).append(" ");
         result.append("DestinationDB: ").append(this.destination.getDbName()).append(" ");
-
+        result.append("AttribuutID").append(i).append(": ").append(this.destination.getAttributeID()).append(" ");
+        result.append("MappingID").append(i).append(": ").append(this.destination.getMappingID()).append(" ");
         return result.toString();
     }
 
