@@ -5,6 +5,7 @@ import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
+import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -36,10 +37,7 @@ public class SceneReconnectProvider implements ReconnectProvider {
     }
 
     public boolean isSourceReconnectable(ConnectionWidget connectionWidget) {
-        Object object = scene.findObject(connectionWidget);
-        edge = scene.isEdge(object) ? (String) object : null;
-        originalNode = edge != null ? (String) scene.getEdgeSource(edge) : null;
-        return originalNode != null;
+        return false;
     }
 
     public boolean isTargetReconnectable(ConnectionWidget connectionWidget) {
@@ -69,6 +67,33 @@ public class SceneReconnectProvider implements ReconnectProvider {
     }
 
     public void reconnect(ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource) {
+        LabelWidget source = (LabelWidget)connectionWidget.getSourceAnchor().getRelatedWidget();
+        if(source != null) {
+            System.out.println("Found a source: " + source.getLabel());
+        } else {
+            System.out.println("This is a bit of a shame: no source");
+        }
+        
+        LabelWidget target = (LabelWidget)connectionWidget.getTargetAnchor().getRelatedWidget();
+        if(target != null) {
+            System.out.println("Found a target: " + target.getLabel());
+        } else {
+            System.out.println("This is a bit of a shame: no target");
+        }
+        
+        LabelWidget replacement = (LabelWidget)replacementWidget;
+        if(replacement != null) {
+            System.out.println("Found a replacement: " + replacement.getLabel());
+        } else {
+            System.out.println("This is a bit of a shame: no target");
+        }
+        
+        if(!reconnectingSource) {
+            System.out.println("This should always be true");
+        } else {
+               System.out.println("Whoops"); 
+        }
+        
         if (replacementWidget == null) {
         } else if (reconnectingSource) {
             scene.setEdgeSource(edge, replacementNode);

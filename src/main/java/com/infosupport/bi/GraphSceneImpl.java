@@ -52,7 +52,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
             //Maakt een tranformatiewidget aan
             String transformationString = dataflow.get(i).getTransformation();
             if (transformationString == null) {
-                transformationString = "No transformation" + i;
+                transformationString = "No transformation";
             }
             Widget transformation = addNode(transformationString);
             transformation.setPreferredLocation(new Point(xtransformation, y));
@@ -99,7 +99,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
 
     @Override
     protected Widget attachNodeWidget(String n) {
-        LabelWidget widget = new LabelWidget(this);
+        LabelWidget widget = new TransformationWidget(this);
 
         widget.getActions().addAction(
                 ActionFactory.createAlignWithMoveAction(

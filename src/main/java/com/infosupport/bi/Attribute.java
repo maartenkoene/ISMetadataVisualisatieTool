@@ -7,13 +7,15 @@ public class Attribute {
     private final String tableName;
     private final int attributeID;
     private final int mappingID;
+    private final int mappingSetID;
 
-    public Attribute(String name, String dbName, String tableName, int attributeID, int mappingID) {
+    public Attribute(String name, String dbName, String tableName, int attributeID, int mappingID, int mappingSetID) {
         this.name = name;
         this.dbName = dbName;
         this.tableName = tableName;
         this.attributeID = attributeID;
         this.mappingID = mappingID;
+        this.mappingSetID = mappingSetID;
     }
 
     public String getName() {
@@ -34,6 +36,10 @@ public class Attribute {
 
     public int getMappingID() {
         return mappingID;
+    }
+
+    public int getMappingSetID() {
+        return mappingSetID;
     }
     
     public boolean compareAttributes(Attribute aNewAttribute) {

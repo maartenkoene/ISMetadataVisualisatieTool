@@ -69,20 +69,19 @@ public class MSSQLQuery {
 
         return rs;
     }
-    
-    
-    public ResultSet getMappings(int MappingSet){
-    
+
+    public ResultSet getMappings(int MappingSet) {
+
         PreparedStatement statement;
         ResultSet rs = null;
-        String mappingSetId= Integer.toString(MappingSet);
-        
-                try {
+        String mappingSetId = Integer.toString(MappingSet);
+
+        try {
             statement = connection.prepareStatement("SELECT Dest.MappingID, "
                     + "Dest.DestinationAttributeID, DestAttr.Name, "
                     + "DTabel.Name, DDatabase.Name, Dest.Transformation, "
                     + "Src.MappingID, Src.SourceAttributeID, SrcAttr.Name, "
-                    + "STabel.Name,SDatabase.Name "
+                    + "STabel.Name,SDatabase.Name, MappingSetID "
                     + "FROM ISMetadata.ismd.MappingMappingSet MMS "
                     + "LEFT JOIN ISMetadata.ismd.Mapping Dest "
                     + "ON MMS.MappingID = Dest.MappingID "
@@ -110,9 +109,50 @@ public class MSSQLQuery {
             e.printStackTrace();
             System.out.println("Query mappings faalt");
         }
-        
-        
+
         return rs;
+    }
+
+    public void updateDestination() {
+
+        String transformationString = null;
+        int destintationID = 0;
+        int sourceMappingID = 0;
+
+        PreparedStatement statement;
+
+        try {
+            statement = connection.prepareStatement("UPDATE ISMetadata.ismd.Mapping"
+                    + "SET [DestinationAttributeID] =?,"
+                    + "[Transformation] = ?"
+                    + "WHERE [MappingID] = ?");
+
+            statement.setInt(1, destintationID);
+            statement.setString(2, transformationString);
+            statement.setInt(3, sourceMappingID);
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Kan geen bestemming updaten");
+        }
+
+    }
+    
+    public void updateSource(){
+    
+       String deleteStatement = "DELETE FROM ISMetadata.ismd.MappingRow WHERE MappingID = ?";
+       
+       String insertDestinationStatement = "INSERT INTO ISMetadata.ismd.Mapping ([DestinationAttributeID],[Transformation],[Name]) VALUES ('?','?', null)";
+       
+       String selectLastID = "SELECT MAX(MappingID) FROM ISMetadata.ismd.Mapping";
+       
+       String insertSourceStatement = "INSERT INTO ISMetadata.ismd.MappingRow ([MappingID],[SourceAttributeID],[ParameterNumber]) VALUES ('?','?', '1')";
+       
+       String insertMappingSet = "INSERT INTO ISMetadata.ismd.MappingMappingSet ([MappingID], [MappingSetID]) VALUES (?, ?)";
+
+
     }
 
 }

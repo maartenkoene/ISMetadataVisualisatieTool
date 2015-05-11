@@ -14,8 +14,8 @@ public class DataFlow {
         destinations = new ArrayList<DestinationAttribute>();
     }
 
-    public Attribute createAttribute(String name, String dbName, String tableName, int attributeID, int mappingID) {
-        Attribute attribute = new Attribute(name, dbName, tableName, attributeID, mappingID);
+    public Attribute createAttribute(String name, String dbName, String tableName, int attributeID, int mappingID, int mappingSetID) {
+        Attribute attribute = new Attribute(name, dbName, tableName, attributeID, mappingID, mappingSetID);
         return attribute;
     }
 
@@ -57,8 +57,8 @@ public class DataFlow {
         try {
             while (rs.next()) {
 
-                Attribute source = this.createAttribute(rs.getString(9), rs.getString(11), rs.getString(10), rs.getInt(8), rs.getInt(7));
-                Attribute destination = this.createAttribute(rs.getString(3), rs.getString(5), rs.getString(4), rs.getInt(2),rs.getInt(1));
+                Attribute source = this.createAttribute(rs.getString(9), rs.getString(11), rs.getString(10), rs.getInt(8), rs.getInt(7), rs.getInt(12));
+                Attribute destination = this.createAttribute(rs.getString(3), rs.getString(5), rs.getString(4), rs.getInt(2),rs.getInt(1),rs.getInt(12));
 
                 this.createDestination(source, rs.getString(6), destination);
 

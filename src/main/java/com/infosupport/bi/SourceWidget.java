@@ -1,6 +1,5 @@
 package com.infosupport.bi;
 
-import java.util.List;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 
@@ -8,18 +7,17 @@ import org.netbeans.api.visual.widget.Scene;
  *
  * @author MaartenKo
  */
-public class TransformationWidget extends LabelWidget {
+public class SourceWidget extends LabelWidget {
+    private int sourceAttributeID;
     private String transformation;
     private int mappingID;
     private int mappingSetID;
-    private int destinationAttributeID;
-    private List<Integer> sources;
 
-    public TransformationWidget(Scene scene) {
+    public SourceWidget(Scene scene) {
         super(scene);
     }
     
-    public TransformationWidget(Scene scene, String label) {
+    public SourceWidget(Scene scene, String label) {
         super(scene, label);
         
     }

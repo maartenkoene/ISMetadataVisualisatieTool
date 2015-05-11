@@ -26,8 +26,8 @@ public class DataFlowModelTest {
     @Test
     public void compareShouldBeTrue() {
         DataFlow dataFlow = new DataFlow();
-        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car", 1, 1);
-        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle",2,2);
+        Attribute sourceAttribute = dataFlow.createAttribute("carName", "Database1", "Car", 1, 1,1);
+        Attribute destinationAttribute = dataFlow.createAttribute("VehicleName", "DatabWarehouse", "Vehicle",2,2,1);
         DestinationAttribute destination = new DestinationAttribute(sourceAttribute, "something",destinationAttribute);
         
         
@@ -38,12 +38,12 @@ public class DataFlowModelTest {
        @Test
     public void destinationWithMultipleSources(){
         DataFlow dataFlow = new DataFlow();
-        Attribute source1 = dataFlow.createAttribute("Autonaam", "Database", "Auto",1,2);
-        Attribute source2 = dataFlow.createAttribute("carName", "Database1", "Car",3,4);
-        Attribute source3 = dataFlow.createAttribute("fiets", "Datab", "fietsen",5,6);
+        Attribute source1 = dataFlow.createAttribute("Autonaam", "Database", "Auto",1,2,1);
+        Attribute source2 = dataFlow.createAttribute("carName", "Database1", "Car",3,4,1);
+        Attribute source3 = dataFlow.createAttribute("fiets", "Datab", "fietsen",5,6,1);
         
-        Attribute destination = dataFlow.createAttribute("Autonaam", "Database", "Auto",7,8);
-        Attribute destination2 = dataFlow.createAttribute("FietsID", "DataW", "Fiets",9,10);
+        Attribute destination = dataFlow.createAttribute("Autonaam", "Database", "Auto",7,8,1);
+        Attribute destination2 = dataFlow.createAttribute("FietsID", "DataW", "Fiets",9,10,1);
 
         dataFlow.createDestination(source1, "add", destination);
         dataFlow.createDestination(source3, null, destination2);
