@@ -10,8 +10,6 @@ import org.netbeans.api.visual.widget.Scene;
  */
 public class DestinationWidget extends LabelWidget {
     private String transformation;
-    private int mappingID;
-    private int mappingSetID;
     private int destinationAttributeID;
 
     public DestinationWidget(Scene scene) {
@@ -32,6 +30,20 @@ public class DestinationWidget extends LabelWidget {
         super.setLabel(label); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    public void setTransformation(String transformation) {
+        this.transformation = transformation;
+    }
+
+    public void setDestinationAttributeID(int destinationAttributeID) {
+        this.destinationAttributeID = destinationAttributeID;
+    }
+
+    public String getTransformation() {
+        return transformation;
+    }
+
+    public int getDestinationAttributeID() {
+        return destinationAttributeID;
+    }
 
 }

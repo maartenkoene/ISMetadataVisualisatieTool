@@ -113,11 +113,7 @@ public class MSSQLQuery {
         return rs;
     }
 
-    public void updateDestination() {
-
-        String transformationString = null;
-        int destintationID = 0;
-        int sourceMappingID = 0;
+    public void updateDestination(int sourceMappingID, int destinationAttrID, String transformationString) {
 
         PreparedStatement statement;
 
@@ -127,7 +123,7 @@ public class MSSQLQuery {
                     + "[Transformation] = ?"
                     + "WHERE [MappingID] = ?");
 
-            statement.setInt(1, destintationID);
+            statement.setInt(1, destinationAttrID);
             statement.setString(2, transformationString);
             statement.setInt(3, sourceMappingID);
 
@@ -140,7 +136,7 @@ public class MSSQLQuery {
 
     }
     
-    public void updateSource(){
+    public void updateSource(int sourceMappingID, int destinationAttrID, String transformation, int sourceAttrID, int mappingSetID){
     
        String deleteStatement = "DELETE FROM ISMetadata.ismd.MappingRow WHERE MappingID = ?";
        

@@ -5,7 +5,6 @@ import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -51,8 +50,6 @@ public class SceneReconnectProvider implements ReconnectProvider {
         Object object = scene.findObject(replacementWidget);
         replacementNode = scene.isNode(object) ? (String) object : null;
         if (replacementNode != null) {
-            //Hier wat aan doen met daan?
-           // System.out.println("isReplacementWidget " + object.toString());
             return ConnectorState.ACCEPT;
         }
         return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
@@ -67,33 +64,15 @@ public class SceneReconnectProvider implements ReconnectProvider {
     }
 
     public void reconnect(ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource) {
-        LabelWidget source = (LabelWidget)connectionWidget.getSourceAnchor().getRelatedWidget();
-        if(source != null) {
-            System.out.println("Found a source: " + source.getLabel());
-        } else {
-            System.out.println("This is a bit of a shame: no source");
+        Widget source = connectionWidget.getSourceAnchor().getRelatedWidget();
+        Widget target = connectionWidget.getTargetAnchor().getRelatedWidget();
+        Widget replacement = replacementWidget;
+
+        if (source instanceof TransformationWidget) {
+            TransformationWidget trans = (TransformationWidget) source;
+            System.out.println("We hebben een transformatie: " + trans.getTransformation());
         }
-        
-        LabelWidget target = (LabelWidget)connectionWidget.getTargetAnchor().getRelatedWidget();
-        if(target != null) {
-            System.out.println("Found a target: " + target.getLabel());
-        } else {
-            System.out.println("This is a bit of a shame: no target");
-        }
-        
-        LabelWidget replacement = (LabelWidget)replacementWidget;
-        if(replacement != null) {
-            System.out.println("Found a replacement: " + replacement.getLabel());
-        } else {
-            System.out.println("This is a bit of a shame: no target");
-        }
-        
-        if(!reconnectingSource) {
-            System.out.println("This should always be true");
-        } else {
-               System.out.println("Whoops"); 
-        }
-        
+
         if (replacementWidget == null) {
         } else if (reconnectingSource) {
             scene.setEdgeSource(edge, replacementNode);

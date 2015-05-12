@@ -1,5 +1,6 @@
 package com.infosupport.bi;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
@@ -9,23 +10,24 @@ import org.netbeans.api.visual.widget.Scene;
  * @author MaartenKo
  */
 public class TransformationWidget extends LabelWidget {
+
     private String transformation;
-    private int mappingID;
     private int mappingSetID;
     private int destinationAttributeID;
-    private List<Integer> sources;
+    private List<Integer> sourcesMappingID = new ArrayList();
 
     public TransformationWidget(Scene scene) {
         super(scene);
     }
-    
+
     public TransformationWidget(Scene scene, String label) {
         super(scene, label);
-        
+
     }
+
     @Override
     public String getLabel() {
-        return  super.getLabel(); //To change body of generated methods, choose Tools | Templates.
+        return super.getLabel(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -33,6 +35,36 @@ public class TransformationWidget extends LabelWidget {
         super.setLabel(label); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    public void setTransformation(String transformation) {
+        this.transformation = transformation;
+    }
+
+    public int getMappingSetID() {
+        return mappingSetID;
+    }
+
+    public void setMappingSetID(int mappingSetID) {
+        this.mappingSetID = mappingSetID;
+    }
+
+    public int getDestinationAttributeID() {
+        return destinationAttributeID;
+    }
+
+    public void setDestinationAttributeID(int destinationAttributeID) {
+        this.destinationAttributeID = destinationAttributeID;
+    }
+
+    public List<Integer> getSourcesMappingID() {
+        return sourcesMappingID;
+    }
+
+    public void addSource(int sourceMappingID) {
+        sourcesMappingID.add(sourceMappingID);
+    }
+
+    public String getTransformation() {
+        return transformation;
+    }
 
 }
