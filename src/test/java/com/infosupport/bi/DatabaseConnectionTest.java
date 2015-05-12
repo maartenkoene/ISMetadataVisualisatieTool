@@ -7,6 +7,7 @@ package com.infosupport.bi;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import junit.framework.Assert;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
@@ -85,7 +86,7 @@ public class DatabaseConnectionTest {
 
         try {
             while (rs.next()) {
-            //    System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
+                //    System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
             }
         } catch (Exception e) {
             Assert.fail("Query faalt");
@@ -93,5 +94,12 @@ public class DatabaseConnectionTest {
 
         assertNotNull("Geen mappings opgehaald", rs);
 
+    }
+
+    @Test
+    public void testUpdateSource() throws SQLException {
+        MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
+        
+        mssqlQuery.updateSource(162,343,"Distinct",213,7);
     }
 }

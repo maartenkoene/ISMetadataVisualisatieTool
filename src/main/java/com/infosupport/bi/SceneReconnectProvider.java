@@ -48,9 +48,14 @@ public class SceneReconnectProvider implements ReconnectProvider {
 
     public ConnectorState isReplacementWidget(ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource) {
         Object object = scene.findObject(replacementWidget);
+        Widget originalSource = connectionWidget.getSourceAnchor().getRelatedWidget();
         replacementNode = scene.isNode(object) ? (String) object : null;
         if (replacementNode != null) {
-            return ConnectorState.ACCEPT;
+            if (originalSource instanceof SourceWidget && replacementWidget instanceof TransformationWidget) {
+                return ConnectorState.ACCEPT;
+            } else if (originalSource instanceof TransformationWidget && replacementWidget instanceof DestinationWidget) {
+                return ConnectorState.ACCEPT;
+            }
         }
         return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
     }
@@ -68,9 +73,16 @@ public class SceneReconnectProvider implements ReconnectProvider {
         Widget target = connectionWidget.getTargetAnchor().getRelatedWidget();
         Widget replacement = replacementWidget;
 
-        if (source instanceof TransformationWidget) {
+        if (source instanceof TransformationWidget && replacement instanceof DestinationWidget) {
             TransformationWidget trans = (TransformationWidget) source;
+            DestinationWidget dest = (DestinationWidget) replacement;
             System.out.println("We hebben een transformatie: " + trans.getTransformation());
+            System.out.println("Dit is de nieuwe bestemming: " + dest.getDestinationAttributeID() + " " + dest.getLabel());
+        } else if (source instanceof SourceWidget && replacement instanceof TransformationWidget) {
+            SourceWidget origin = (SourceWidget) source;
+            TransformationWidget trans = (TransformationWidget) replacement;
+            System.out.println("We hebben een source: " + origin.getSourceAttributeID() + " " + origin.getLabel());
+            System.out.println("Dit is de nieuwe transformatie: " + trans.getLabel());
         }
 
         if (replacementWidget == null) {

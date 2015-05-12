@@ -8,6 +8,8 @@ package com.infosupport.bi;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -135,19 +137,97 @@ public class MSSQLQuery {
         }
 
     }
-    
-    public void updateSource(int sourceMappingID, int destinationAttrID, String transformation, int sourceAttrID, int mappingSetID){
-    
-       String deleteStatement = "DELETE FROM ISMetadata.ismd.MappingRow WHERE MappingID = ?";
-       
-       String insertDestinationStatement = "INSERT INTO ISMetadata.ismd.Mapping ([DestinationAttributeID],[Transformation],[Name]) VALUES ('?','?', null)";
-       
-       String selectLastID = "SELECT MAX(MappingID) FROM ISMetadata.ismd.Mapping";
-       
-       String insertSourceStatement = "INSERT INTO ISMetadata.ismd.MappingRow ([MappingID],[SourceAttributeID],[ParameterNumber]) VALUES ('?','?', '1')";
-       
-       String insertMappingSet = "INSERT INTO ISMetadata.ismd.MappingMappingSet ([MappingID], [MappingSetID]) VALUES (?, ?)";
 
+    public void updateSource(int sourceMappingID, int destinationAttrID, String transformation, int sourceAttrID, int mappingSetID) throws SQLException {
+
+        String deleteMappingRowStatement = "DELETE FROM ISMetadata.ismd.MappingRow WHERE MappingID = ?";
+
+        String deleteMappingSetRow = "DELETE FROM ISMetadata.ismd.MappingMappingSet WHERE MappingID = ? AND MappingSetID = ?";
+
+        String deleteMappingStatement = "DELETE FROM ISMetadata.ismd.Mapping WHERE MappingID = ?";
+
+        String insertDestinationStatement = "INSERT INTO ISMetadata.ismd.Mapping ([DestinationAttributeID],"
+                + "[Transformation],[Name]) VALUES (?,?, null)";
+
+        String insertSourceStatement = "INSERT INTO ISMetadata.ismd.MappingRow "
+                + "([MappingID],[SourceAttributeID],[ParameterNumber]) "
+                + "VALUES (?,?, '1')";
+
+        String insertMappingSet = "INSERT INTO ISMetadata.ismd.MappingMappingSet "
+                + "([MappingID], [MappingSetID]) "
+                + "VALUES (?, ?)";
+
+        PreparedStatement preparedMappingRowDelete = null;
+        PreparedStatement preparedMappingSetDelete = null;
+        PreparedStatement preparedMappingDelete = null;
+        PreparedStatement preparedInsertDestination = null;
+        PreparedStatement preparedInsertSource = null;
+        PreparedStatement preparedInsertMappingSet = null;
+
+        try {
+            connection.setAutoCommit(false);
+            //Oude mappings verwijderen
+            preparedMappingRowDelete = connection.prepareStatement(deleteMappingRowStatement);
+            preparedMappingRowDelete.setInt(1, sourceMappingID);
+            preparedMappingRowDelete.executeUpdate();
+
+            preparedMappingSetDelete = connection.prepareStatement(deleteMappingSetRow);
+            preparedMappingSetDelete.setInt(1, sourceMappingID);
+            preparedMappingSetDelete.setInt(2, mappingSetID);
+            preparedMappingSetDelete.executeUpdate();
+
+            preparedMappingDelete = connection.prepareStatement(deleteMappingStatement);
+            preparedMappingDelete.setInt(1, sourceMappingID);
+            preparedMappingDelete.executeUpdate();
+
+            //van deze de key terugkrijgen
+            preparedInsertDestination = connection.prepareStatement(insertDestinationStatement, Statement.RETURN_GENERATED_KEYS);
+            preparedInsertDestination.setInt(1, destinationAttrID);
+            preparedInsertDestination.setString(2, transformation);
+            preparedInsertDestination.executeUpdate();
+            ResultSet keys = preparedInsertDestination.getGeneratedKeys();
+
+            int mappingID = -1;
+            while (keys.next()) {
+                mappingID = keys.getInt(1);
+            }
+            if (mappingID != -1) {
+                preparedInsertSource = connection.prepareStatement(insertSourceStatement);
+                preparedInsertSource.setInt(1, mappingID);
+                preparedInsertSource.setInt(2, sourceAttrID);
+                preparedInsertSource.executeUpdate();
+
+                preparedInsertMappingSet = connection.prepareStatement(insertMappingSet);
+                preparedInsertMappingSet.setInt(1, mappingID);
+                preparedInsertMappingSet.setInt(2, mappingSetID);
+                preparedInsertMappingSet.executeUpdate();
+            }
+            connection.commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            connection.rollback();
+        } finally {
+            if (preparedMappingRowDelete != null) {
+                preparedMappingRowDelete.close();
+            }
+            if (preparedMappingSetDelete != null) {
+                preparedMappingSetDelete.close();
+            }
+            if (preparedMappingDelete != null) {
+                preparedMappingDelete.close();
+            }
+            if (preparedInsertDestination != null) {
+                preparedInsertDestination.close();
+            }
+            if (preparedInsertSource != null) {
+                preparedInsertSource.close();
+            }
+            if (preparedInsertMappingSet != null) {
+                preparedInsertMappingSet.close();
+            }
+            connection.setAutoCommit(true);
+        }
 
     }
 
