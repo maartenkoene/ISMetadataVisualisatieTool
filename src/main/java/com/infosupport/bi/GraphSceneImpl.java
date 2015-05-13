@@ -28,7 +28,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
     private final LayerWidget mainLayer;
     private final LayerWidget connectionLayer;
     private final LayerWidget interactionLayer;
-    private WidgetAction reconnectAction;
+    private final WidgetAction reconnectAction;
 
     public GraphSceneImpl(List<DestinationAttribute> dataflow) {
         mainLayer = new LayerWidget(this);

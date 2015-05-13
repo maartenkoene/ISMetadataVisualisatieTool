@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.List;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -80,9 +81,23 @@ public class VisualisationField extends JPanel {
             }
         });
         
+        //aanmaken van een opslaan knop
+        JButton saveAction = new JButton("Save");
+        saveAction.setPreferredSize(new Dimension(100,40));
+        
+        saveAction.addActionListener(new ActionListener(){
+
+            public void actionPerformed(ActionEvent ae) {
+                JOptionPane.showMessageDialog(null,"De button opslaan doet et");
+            }
+        
+            
+        });
+        
         //toevoegen van comboxbox aan toolbar
         toolbar.add(new JLabel("Systemen:"));
         toolbar.add(systems);
+        toolbar.add(saveAction);
 
         //toevoegen van de components aan het frame bovenin
         add(toolbar, BorderLayout.NORTH);

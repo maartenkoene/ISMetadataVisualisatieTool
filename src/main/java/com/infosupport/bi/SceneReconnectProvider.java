@@ -1,6 +1,7 @@
 package com.infosupport.bi;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.graph.GraphScene;
@@ -76,13 +77,31 @@ public class SceneReconnectProvider implements ReconnectProvider {
         if (source instanceof TransformationWidget && replacement instanceof DestinationWidget) {
             TransformationWidget trans = (TransformationWidget) source;
             DestinationWidget dest = (DestinationWidget) replacement;
-            System.out.println("We hebben een transformatie: " + trans.getTransformation());
+            DestinationWidget oldDest = (DestinationWidget) target;
+            
+            System.out.println("Oude destinationID: " + trans.getDestinationAttributeID());
+            dest.setTransformation(trans.getTransformation());
+            oldDest.setTransformation(null);
+            trans.setDestinationAttributeID(dest.getDestinationAttributeID());
+            
+            System.out.println("We hebben een transformatie: " + trans.getTransformation()+" met nieuwe destination: "+ trans.getDestinationAttributeID());
             System.out.println("Dit is de nieuwe bestemming: " + dest.getDestinationAttributeID() + " " + dest.getLabel());
+
         } else if (source instanceof SourceWidget && replacement instanceof TransformationWidget) {
             SourceWidget origin = (SourceWidget) source;
             TransformationWidget trans = (TransformationWidget) replacement;
+            TransformationWidget oldTrans = (TransformationWidget) target;
             System.out.println("We hebben een source: " + origin.getSourceAttributeID() + " " + origin.getLabel());
             System.out.println("Dit is de nieuwe transformatie: " + trans.getLabel());
+            System.out.println("De oude transformatie"+ oldTrans.getLabel());
+            
+            oldTrans.removeItemFromSourcesMappingID(origin.getSourceAttributeID());
+            trans.addSource(origin.getSourceAttributeID());
+            
+            ArrayList<Integer> sourceMappings = (ArrayList) trans.getSourcesMappingID();
+            for(Integer integer : sourceMappings){
+            System.out.println("SourceID: "+ integer.toString());
+            }
         }
 
         if (replacementWidget == null) {

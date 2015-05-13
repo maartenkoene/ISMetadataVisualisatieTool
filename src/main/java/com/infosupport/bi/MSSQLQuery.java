@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -41,7 +42,7 @@ public class MSSQLQuery {
             rs = statement.executeQuery();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.toString());
             System.out.println("Query systems faalt");
         }
 
@@ -65,7 +66,7 @@ public class MSSQLQuery {
             rs = statement.executeQuery();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.toString());
             System.out.println("Query mappingset faalt");
         }
 
@@ -108,7 +109,7 @@ public class MSSQLQuery {
             rs = statement.executeQuery();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.toString());
             System.out.println("Query mappings faalt");
         }
 
@@ -132,7 +133,7 @@ public class MSSQLQuery {
             statement.executeUpdate();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.toString());
             System.out.println("Kan geen bestemming updaten");
         }
 
@@ -205,7 +206,7 @@ public class MSSQLQuery {
             connection.commit();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.toString());
             connection.rollback();
         } finally {
             if (preparedMappingRowDelete != null) {

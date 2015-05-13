@@ -67,4 +67,13 @@ public class TransformationWidget extends LabelWidget {
         return transformation;
     }
 
+    public void removeItemFromSourcesMappingID(int sourceID){
+        int i =0;
+        while (i < sourcesMappingID.size()){
+            if(sourceID == sourcesMappingID.get(i)){
+            sourcesMappingID.remove(i);
+                break;
+            }
+            i++;
+        }}
 }

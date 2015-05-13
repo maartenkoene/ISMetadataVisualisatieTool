@@ -100,6 +100,6 @@ public class DatabaseConnectionTest {
     public void testUpdateSource() throws SQLException {
         MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
         
-        mssqlQuery.updateSource(162,343,"Distinct",213,7);
+      //  mssqlQuery.updateSource(162,343,"Distinct",213,7);
     }
 }
