@@ -121,10 +121,7 @@ public class MSSQLQuery {
         PreparedStatement statement;
 
         try {
-            statement = connection.prepareStatement("UPDATE ISMetadata.ismd.Mapping"
-                    + "SET [DestinationAttributeID] =?,"
-                    + "[Transformation] = ?"
-                    + "WHERE [MappingID] = ?");
+            statement = connection.prepareStatement("UPDATE ISMetadata.ismd.Mapping SET [DestinationAttributeID] = ?, [Transformation] = ? WHERE [MappingID] = ? ");
 
             statement.setInt(1, destinationAttrID);
             statement.setString(2, transformationString);

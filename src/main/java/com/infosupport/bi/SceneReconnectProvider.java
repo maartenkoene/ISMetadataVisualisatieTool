@@ -24,7 +24,8 @@ public class SceneReconnectProvider implements ReconnectProvider {
     private String replacementNode;
 
     private GraphScene scene;
-    private ChangeHandler changehandler = new ChangeHandler();
+    //dit moet hier echt weg... maar hoe?
+    private ChangeHandler changehandler = new ChangeHandler("jdbc:sqlserver://127.0.0.1:1433;databaseName=ISMetadata;integratedSecurity=true;", "Visualisation", "Info2015");
 
     public SceneReconnectProvider(GraphScene scene) {
         this.scene = scene;

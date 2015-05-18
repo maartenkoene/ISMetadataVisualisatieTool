@@ -29,12 +29,14 @@ public class GraphSceneImpl extends GraphScene<String, String> {
     private final LayerWidget connectionLayer;
     private final LayerWidget interactionLayer;
     private final WidgetAction reconnectAction;
+    private final SceneReconnectProvider reconnect;
 
     public GraphSceneImpl(List<DestinationAttribute> dataflow) {
+        reconnect = new SceneReconnectProvider(this);
         mainLayer = new LayerWidget(this);
         connectionLayer = new LayerWidget(this);
         interactionLayer = new LayerWidget(this);
-        reconnectAction = ActionFactory.createReconnectAction(new SceneReconnectProvider(this));
+        reconnectAction = ActionFactory.createReconnectAction(reconnect);
 
         addChild(mainLayer);
         addChild(connectionLayer);
@@ -88,7 +90,6 @@ public class GraphSceneImpl extends GraphScene<String, String> {
             for (Attribute sourceAttr : dataflow.get(i).getSourceAttributes()) {
                 String sourceAttrName = "SName: " + sourceAttr.getName()
                         + " Table: " + sourceAttr.getTableName();
-                        
 
                 SourceWidget source = (SourceWidget) addNode(sourceAttrName);
                 source.setPreferredLocation(new Point(xsource, ySource));
@@ -102,7 +103,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
                 ySource += 20;
 
                 //Set the data for the transformation source and sources
-                transformation.addSource(sourceAttr.getAttributeID());
+                transformation.addSource(sourceAttr.getMappingID());
                 source.setMappingID(sourceAttr.getMappingID());
                 source.setTransformation(transformationWidget);
                 source.setSourceAttributeID(sourceAttr.getAttributeID());
@@ -168,4 +169,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
         widget.setTargetAnchor(targetNodeWidget != null ? AnchorFactory.createFreeRectangularAnchor(targetNodeWidget, true) : null);
     }
 
+    public ChangeHandler getChanges() {
+        return reconnect.getChangehandler();
+    }
 }

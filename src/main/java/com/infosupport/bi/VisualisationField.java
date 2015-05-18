@@ -38,6 +38,7 @@ public class VisualisationField extends JPanel {
     private final String password;
     private final DataFlowHandler dataflowhandler;
     private int datamodelID;
+    private GraphScene scene;
 
     public VisualisationField() {
         connect = "jdbc:sqlserver://127.0.0.1:1433;databaseName=ISMetadata;integratedSecurity=true;";
@@ -76,7 +77,7 @@ public class VisualisationField extends JPanel {
                 ResultSet mappings = dataflowhandler.getMappingSets(datamodelID);
                 dataflowhandler.createMappingList(mappings);
                 List<DestinationAttribute> dataflow = dataflowhandler.getDataFlow();
-                GraphScene scene = new GraphSceneImpl(dataflow);
+                scene = new GraphSceneImpl(dataflow);
                 scrollPane.setViewportView(scene.createView());
             }
         });
@@ -89,6 +90,11 @@ public class VisualisationField extends JPanel {
 
             public void actionPerformed(ActionEvent ae) {
                 JOptionPane.showMessageDialog(null,"De button opslaan doet et");
+                GraphSceneImpl graphScene = (GraphSceneImpl)scene;
+                ChangeHandler changes = graphScene.getChanges();
+                changes.checkDoubleEntries();
+                changes.savesChanges();
+                
             }
         
             
@@ -108,7 +114,7 @@ public class VisualisationField extends JPanel {
         dataflowhandler.createMappingList(mappings);
 
         List<DestinationAttribute> dataflow = dataflowhandler.getDataFlow();
-        GraphScene scene = new GraphSceneImpl(dataflow);
+        scene = new GraphSceneImpl(dataflow);
         scrollPane.setViewportView(scene.createView());
 
     }
