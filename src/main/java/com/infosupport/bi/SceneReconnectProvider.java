@@ -1,7 +1,6 @@
 package com.infosupport.bi;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.graph.GraphScene;
@@ -25,6 +24,7 @@ public class SceneReconnectProvider implements ReconnectProvider {
     private String replacementNode;
 
     private GraphScene scene;
+    private ChangeHandler changehandler = new ChangeHandler();
 
     public SceneReconnectProvider(GraphScene scene) {
         this.scene = scene;
@@ -78,14 +78,20 @@ public class SceneReconnectProvider implements ReconnectProvider {
             TransformationWidget trans = (TransformationWidget) source;
             DestinationWidget dest = (DestinationWidget) replacement;
             DestinationWidget oldDest = (DestinationWidget) target;
-            
+
             System.out.println("Oude destinationID: " + trans.getDestinationAttributeID());
             dest.setTransformation(trans.getTransformation());
-            oldDest.setTransformation(null);
             trans.setDestinationAttributeID(dest.getDestinationAttributeID());
-            
-            System.out.println("We hebben een transformatie: " + trans.getTransformation()+" met nieuwe destination: "+ trans.getDestinationAttributeID());
+            oldDest.setTransformation(null);
+
+            System.out.println("We hebben een transformatie: " + trans.getTransformation() + " met nieuwe destination: " + trans.getDestinationAttributeID());
             System.out.println("Dit is de nieuwe bestemming: " + dest.getDestinationAttributeID() + " " + dest.getLabel());
+
+            for (Integer integer : trans.getSourcesMappingID()) {
+                ChangeDestination changeDestination = new ChangeDestination(integer.intValue(), dest.getDestinationAttributeID(),
+                        trans.getTransformation(), trans.getTransformation(), oldDest.getDestinationAttributeID());
+                changehandler.setChangesList(changeDestination);
+            }
 
         } else if (source instanceof SourceWidget && replacement instanceof TransformationWidget) {
             SourceWidget origin = (SourceWidget) source;
@@ -93,15 +99,16 @@ public class SceneReconnectProvider implements ReconnectProvider {
             TransformationWidget oldTrans = (TransformationWidget) target;
             System.out.println("We hebben een source: " + origin.getSourceAttributeID() + " " + origin.getLabel());
             System.out.println("Dit is de nieuwe transformatie: " + trans.getLabel());
-            System.out.println("De oude transformatie"+ oldTrans.getLabel());
-            
+            System.out.println("De oude transformatie" + oldTrans.getLabel());
+
             oldTrans.removeItemFromSourcesMappingID(origin.getSourceAttributeID());
             trans.addSource(origin.getSourceAttributeID());
-            
-            ArrayList<Integer> sourceMappings = (ArrayList) trans.getSourcesMappingID();
-            for(Integer integer : sourceMappings){
-            System.out.println("SourceID: "+ integer.toString());
-            }
+
+            ChangeSource changeSource = new ChangeSource(origin.getMappingID(), trans.getDestinationAttributeID(),
+                    trans.getTransformation(), origin.getSourceAttributeID(), origin.getMappingSetID(), oldTrans.getTransformation(),
+                    oldTrans.getDestinationAttributeID());
+            changehandler.setChangesList(changeSource);
+
         }
 
         if (replacementWidget == null) {
@@ -111,6 +118,10 @@ public class SceneReconnectProvider implements ReconnectProvider {
             scene.setEdgeTarget(edge, replacementNode);
         }
         scene.validate();
+    }
+
+    public ChangeHandler getChangehandler() {
+        return changehandler;
     }
 
 }
