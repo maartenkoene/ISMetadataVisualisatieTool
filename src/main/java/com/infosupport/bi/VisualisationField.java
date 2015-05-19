@@ -89,11 +89,14 @@ public class VisualisationField extends JPanel {
         saveAction.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
-                JOptionPane.showMessageDialog(null, "De button opslaan doet et");
                 GraphSceneImpl graphScene = (GraphSceneImpl) scene;
                 ChangeHandler changes = graphScene.getChanges();
                 changes.checkDoubleEntries();
-                changes.savesChanges();
+                boolean saved = changes.savesChanges();
+
+                if (saved) {
+                    JOptionPane.showMessageDialog(null, "De wijzigingen zijn opgeslagen", "Opgeslagen", JOptionPane.INFORMATION_MESSAGE);
+                }
 
                 ComboboxItem datamodel = (ComboboxItem) systems.getSelectedItem();
                 datamodelID = datamodel.getId();

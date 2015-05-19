@@ -80,13 +80,9 @@ public class SceneReconnectProvider implements ReconnectProvider {
             DestinationWidget dest = (DestinationWidget) replacement;
             DestinationWidget oldDest = (DestinationWidget) target;
 
-            System.out.println("Oude destinationID: " + trans.getDestinationAttributeID());
             dest.setTransformation(trans.getTransformation());
             trans.setDestinationAttributeID(dest.getDestinationAttributeID());
             oldDest.setTransformation(null);
-
-            System.out.println("We hebben een transformatie: " + trans.getTransformation() + " met nieuwe destination: " + trans.getDestinationAttributeID());
-            System.out.println("Dit is de nieuwe bestemming: " + dest.getDestinationAttributeID() + " " + dest.getLabel());
 
             for (Integer integer : trans.getSourcesMappingID()) {
                 ChangeDestination changeDestination = new ChangeDestination(integer.intValue(), dest.getDestinationAttributeID(),
@@ -98,9 +94,6 @@ public class SceneReconnectProvider implements ReconnectProvider {
             SourceWidget origin = (SourceWidget) source;
             TransformationWidget trans = (TransformationWidget) replacement;
             TransformationWidget oldTrans = (TransformationWidget) target;
-            System.out.println("We hebben een source: " + origin.getSourceAttributeID() + " " + origin.getLabel());
-            System.out.println("Dit is de nieuwe transformatie: " + trans.getLabel());
-            System.out.println("De oude transformatie" + oldTrans.getLabel());
 
             oldTrans.removeItemFromSourcesMappingID(origin.getSourceAttributeID());
             trans.addSource(origin.getSourceAttributeID());
