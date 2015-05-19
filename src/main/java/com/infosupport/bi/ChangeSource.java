@@ -58,8 +58,8 @@ public class ChangeSource {
         return oldDestination;
     }
     
-    public boolean compareDestinations(int newDestinationID, String newTransformation, int previousDestination, String previousTransformation) {
-        if (oldDestination == newDestinationID && oldTransformation.equals(newTransformation) && destinationAttrID == previousDestination && transformation.equals(previousTransformation)) {
+    public boolean compareDestinations(int newDestinationID, String newTransformation, int previousDestination, String previousTransformation, int newSourceMappingID) {
+        if (oldDestination == newDestinationID && oldTransformation.equals(newTransformation) && destinationAttrID == previousDestination && transformation.equals(previousTransformation) && sourceMappingID == newSourceMappingID) {
             return true;
         } else {
             return false;

@@ -43,7 +43,7 @@ public class ChangeHandler {
                     if (changesList.get(j) instanceof ChangeSource) {
                         ChangeSource compareSourceCheck = (ChangeSource) changesList.get(j);
                         if (compareSourceCheck.compareDestinations(originalSourceCheck.getDestinationAttrID(), originalSourceCheck.getTransformation(),
-                                originalSourceCheck.getOldDestination(), originalSourceCheck.getOldTransformation())) {
+                                originalSourceCheck.getOldDestination(), originalSourceCheck.getOldTransformation(), originalSourceCheck.getSourceMappingID())) {
                             changesList.set(i, null);
                             changesList.set(j, null);
                             break;
