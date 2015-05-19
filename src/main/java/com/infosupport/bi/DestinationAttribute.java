@@ -53,10 +53,12 @@ public class DestinationAttribute {
 
     public boolean compareDestinations(Attribute destination, String transformation) {
 
-        if (transformation == null || this.transformation == null) {
-            return false;
-        } else {
+        if (transformation == null && this.transformation == null) {
+            return this.destination.compareAttributes(destination);
+        } else if (transformation != null && this.transformation != null) {
             return this.transformation.equals(transformation) && this.destination.compareAttributes(destination);
+        } else {
+            return false;
         }
 
     }
