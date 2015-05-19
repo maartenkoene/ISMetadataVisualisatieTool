@@ -68,8 +68,8 @@ public class VisualisationField extends JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Er kan geen connectie worden gemaakt met de database", "Interne fout", JOptionPane.ERROR_MESSAGE);
         }
-        
-        systems.addActionListener(new ActionListener(){
+
+        systems.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
                 ComboboxItem datamodel = (ComboboxItem) systems.getSelectedItem();
@@ -81,25 +81,31 @@ public class VisualisationField extends JPanel {
                 scrollPane.setViewportView(scene.createView());
             }
         });
-        
+
         //aanmaken van een opslaan knop
         JButton saveAction = new JButton("Save");
-        saveAction.setPreferredSize(new Dimension(100,40));
-        
-        saveAction.addActionListener(new ActionListener(){
+        saveAction.setPreferredSize(new Dimension(100, 40));
+
+        saveAction.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
-                JOptionPane.showMessageDialog(null,"De button opslaan doet et");
-                GraphSceneImpl graphScene = (GraphSceneImpl)scene;
+                JOptionPane.showMessageDialog(null, "De button opslaan doet et");
+                GraphSceneImpl graphScene = (GraphSceneImpl) scene;
                 ChangeHandler changes = graphScene.getChanges();
                 changes.checkDoubleEntries();
                 changes.savesChanges();
-                
+
+                ComboboxItem datamodel = (ComboboxItem) systems.getSelectedItem();
+                datamodelID = datamodel.getId();
+                ResultSet mappings = dataflowhandler.getMappingSets(datamodelID);
+                dataflowhandler.createMappingList(mappings);
+                List<DestinationAttribute> dataflow = dataflowhandler.getDataFlow();
+                scene = new GraphSceneImpl(dataflow);
+                scrollPane.setViewportView(scene.createView());
             }
-        
-            
+
         });
-        
+
         //toevoegen van comboxbox aan toolbar
         toolbar.add(new JLabel("Systemen:"));
         toolbar.add(systems);
@@ -108,7 +114,6 @@ public class VisualisationField extends JPanel {
         //toevoegen van de components aan het frame bovenin
         add(toolbar, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-        
 
         ResultSet mappings = dataflowhandler.getMappingSets(datamodelID);
         dataflowhandler.createMappingList(mappings);
