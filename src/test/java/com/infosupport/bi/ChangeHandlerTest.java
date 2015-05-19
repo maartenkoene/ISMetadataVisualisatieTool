@@ -5,7 +5,9 @@
  */
 package com.infosupport.bi;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -14,9 +16,47 @@ import org.junit.Test;
  */
 public class ChangeHandlerTest {
 
+    int sourceMap2;
+    int destID2;
+    String trans2;
+    int sourceID2;
+    int mappingSet2;
+    String oldTrans2;
+    int oldDest2;
+
+    int sourceMapDes2;
+    int destIDDes2;
+    String newTransDes2;
+    String oldTransDes2;
+    int oldDestDes2;
+
+    ChangeSource realChange;
+    ChangeHandler changehandler;
+    ChangeDestination realChangeDestination;
+
+    @Before
+    public void createVariables() {
+        changehandler = new ChangeHandler();
+        sourceMap2 = 40;
+        destID2 = 400;
+        trans2 = "Iets";
+        sourceID2 = 4;
+        mappingSet2 = 7;
+        oldTrans2 = "Verm";
+        oldDest2 = 500;
+        realChange = new ChangeSource(sourceMap2, oldDest2, oldTrans2, sourceID2, mappingSet2, trans2, destID2);
+
+        sourceMapDes2 = 40;
+        destIDDes2 = 400;
+        newTransDes2 = "no transformation";
+        oldTransDes2 = "iets";
+        oldDestDes2 = 100;
+        realChangeDestination = new ChangeDestination(sourceMapDes2, destIDDes2, newTransDes2, oldTransDes2, oldDestDes2);
+    }
+
     @Test
     public void checkDoubleSourceEntriesShouldBeTrue() {
-        ChangeHandler changehandler = new ChangeHandler();
+
         int sourceMap1 = 20;
         int destID1 = 100;
         String trans1 = "Niks";
@@ -25,19 +65,11 @@ public class ChangeHandlerTest {
         String oldTrans1 = "Nog niks";
         int oldDest1 = 200;
 
-        int sourceMap2 = 40;
-        int destID2 = 400;
-        String trans2 = "Iets";
-        int sourceID2 = 4;
-        int mappingSet2 = 7;
-        String oldTrans2 = "Verm";
-        int oldDest2 = 500;
-
         ChangeSource firstSourceEntry = new ChangeSource(sourceMap1, destID1, trans1, sourceID1, mappingSet1, oldTrans1, oldDest1);
         changehandler.setChangesList(firstSourceEntry);
         ChangeSource changeBack = new ChangeSource(sourceMap1, oldDest1, oldTrans1, sourceID1, mappingSet1, trans1, destID1);
         changehandler.setChangesList(changeBack);
-        ChangeSource realChange = new ChangeSource(sourceMap2, oldDest2, oldTrans2, sourceID2, mappingSet2, trans2, destID2);
+
         changehandler.setChangesList(realChange);
 
         changehandler.checkDoubleEntries();
@@ -47,29 +79,42 @@ public class ChangeHandlerTest {
 
     @Test
     public void checkDoubleDestinationEntriesShouldBeTrue() {
-        ChangeHandler changehandler = new ChangeHandler();
+
         int sourceMap1 = 20;
         int destID1 = 200;
         String newTrans = "no transformation";
         String oldTrans = "verm";
         int oldDest = 100;
 
-        int sourceMap2 = 40;
-        int destID2 = 400;
-        String newTrans2 = "no transformation";
-        String oldTrans2 = "iets";
-        int oldDest2 = 100;
-
         ChangeDestination firstDestinationEntry = new ChangeDestination(sourceMap1, destID1, newTrans, oldTrans, oldDest);
         changehandler.setChangesList(firstDestinationEntry);
         ChangeDestination changeBack = new ChangeDestination(sourceMap1, oldDest, oldTrans, newTrans, destID1);
         changehandler.setChangesList(changeBack);
-        ChangeDestination realChange = new ChangeDestination(sourceMap2, destID2, newTrans2, oldTrans2, oldDest2);
-        changehandler.setChangesList(realChange);
+        changehandler.setChangesList(realChangeDestination);
 
         changehandler.checkDoubleEntries();
 
         assertTrue(changehandler.getChangesList().size() == 1);
 
+    }
+
+    @Test
+    public void savesChangesShouldBeFalse() {
+
+        assertFalse(changehandler.savesChanges());
+    }
+
+    @Test
+    public void changesListShouldBeTrue() {
+        int sourceMap1 = 20;
+        int destID1 = 200;
+        String newTrans = "no transformation";
+        String oldTrans = "verm";
+        int oldDest = 100;
+
+        ChangeDestination firstDestinationEntry = new ChangeDestination(sourceMap1, destID1, newTrans, oldTrans, oldDest);
+        changehandler.setChangesList(firstDestinationEntry);
+
+        assertTrue(changehandler.getChangesList().size() == 1);
     }
 }
