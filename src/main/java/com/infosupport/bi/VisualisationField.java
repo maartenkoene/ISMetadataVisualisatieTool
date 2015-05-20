@@ -96,6 +96,8 @@ public class VisualisationField extends JPanel {
 
                 if (saved) {
                     JOptionPane.showMessageDialog(null, "De wijzigingen zijn opgeslagen", "Opgeslagen", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "De gemaakte wijzigingen veroorzaken conflicten. \nDe wijzigingen zijn niet opgeslagen en worden ongedaan gemaakt", "Syntax fout", JOptionPane.ERROR_MESSAGE);
                 }
 
                 ComboboxItem datamodel = (ComboboxItem) systems.getSelectedItem();

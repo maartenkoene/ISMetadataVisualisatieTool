@@ -71,41 +71,58 @@ public class ChangeHandler {
 
     public boolean savesChanges() {
         boolean saved = false;
+        boolean sourceChangeFound = false;
+        boolean destinationChangeFound = false;
+
         for (Object object : changesList) {
             if (object instanceof ChangeSource) {
-                ChangeSource change = (ChangeSource) object;
-                String transWithId = change.getTransformation();
-                String[] parts = transWithId.split(" id:");
-                String transformation = parts[0];
-
-                try {
-                    if (transformation.equals("No transformation")) {
-                        queryhandler.updateSource(change.getSourceMappingID(), change.getDestinationAttrID(), null,
-                                change.getSourceAttrID(), change.getMappingSetID());
-                    } else {
-                        queryhandler.updateSource(change.getSourceMappingID(), change.getDestinationAttrID(), transformation,
-                                change.getSourceAttrID(), change.getMappingSetID());
-                    }
-                    saved = true;
-                } catch (Exception e) {
-                    saved = false;
-                }
+                sourceChangeFound = true;
             } else if (object instanceof ChangeDestination) {
-                ChangeDestination change = (ChangeDestination) object;
-                String transWithdId = change.getTransformation();
-                String[] parts = transWithdId.split(" id:");
-                String transformation = parts[0];
-                try {
-                    if (transformation.equals("No transformation")) {
-                        queryhandler.updateDestination(change.getSourceMappingID(), change.getDestinationAttrID(), null);
-                    } else {
-                        queryhandler.updateDestination(change.getSourceMappingID(), change.getDestinationAttrID(), transformation);
-                    }
-                } catch (Exception e) {
-                    saved = false;
-                }
+                destinationChangeFound = true;
             }
         }
-        return saved;
+
+        if (sourceChangeFound == true && destinationChangeFound == true) {
+            
+            return saved;
+        } else {
+
+            for (Object object : changesList) {
+                if (object instanceof ChangeSource) {
+                    ChangeSource change = (ChangeSource) object;
+                    String transWithId = change.getTransformation();
+                    String[] parts = transWithId.split(" id:");
+                    String transformation = parts[0];
+
+                    try {
+                        if (transformation.equals("No transformation")) {
+                            queryhandler.updateSource(change.getSourceMappingID(), change.getDestinationAttrID(), null,
+                                    change.getSourceAttrID(), change.getMappingSetID());
+                        } else {
+                            queryhandler.updateSource(change.getSourceMappingID(), change.getDestinationAttrID(), transformation,
+                                    change.getSourceAttrID(), change.getMappingSetID());
+                        }
+                        saved = true;
+                    } catch (Exception e) {
+                        saved = false;
+                    }
+                } else if (object instanceof ChangeDestination) {
+                    ChangeDestination change = (ChangeDestination) object;
+                    String transWithdId = change.getTransformation();
+                    String[] parts = transWithdId.split(" id:");
+                    String transformation = parts[0];
+                    try {
+                        if (transformation.equals("No transformation")) {
+                            queryhandler.updateDestination(change.getSourceMappingID(), change.getDestinationAttrID(), null);
+                        } else {
+                            queryhandler.updateDestination(change.getSourceMappingID(), change.getDestinationAttrID(), transformation);
+                        }
+                    } catch (Exception e) {
+                        saved = false;
+                    }
+                }
+            }
+            return saved;
+        }
     }
 }

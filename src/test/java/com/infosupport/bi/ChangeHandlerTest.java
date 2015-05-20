@@ -30,7 +30,7 @@ public class ChangeHandlerTest {
     String oldTransDes2;
     int oldDestDes2;
 
-    ChangeSource realChange;
+    ChangeSource realChangeSource;
     ChangeHandler changehandler;
     ChangeDestination realChangeDestination;
 
@@ -44,7 +44,7 @@ public class ChangeHandlerTest {
         mappingSet2 = 7;
         oldTrans2 = "Verm";
         oldDest2 = 500;
-        realChange = new ChangeSource(sourceMap2, oldDest2, oldTrans2, sourceID2, mappingSet2, trans2, destID2);
+        realChangeSource = new ChangeSource(sourceMap2, oldDest2, oldTrans2, sourceID2, mappingSet2, trans2, destID2);
 
         sourceMapDes2 = 40;
         destIDDes2 = 400;
@@ -70,7 +70,7 @@ public class ChangeHandlerTest {
         ChangeSource changeBack = new ChangeSource(sourceMap1, oldDest1, oldTrans1, sourceID1, mappingSet1, trans1, destID1);
         changehandler.setChangesList(changeBack);
 
-        changehandler.setChangesList(realChange);
+        changehandler.setChangesList(realChangeSource);
 
         changehandler.checkDoubleEntries();
 
@@ -116,5 +116,14 @@ public class ChangeHandlerTest {
         changehandler.setChangesList(firstDestinationEntry);
 
         assertTrue(changehandler.getChangesList().size() == 1);
+    }
+    
+    @Test
+    public void changesCantBeSaved(){
+    
+        changehandler.setChangesList(realChangeDestination);
+        changehandler.setChangesList(realChangeSource);
+        changehandler.savesChanges();
+        assertFalse(changehandler.savesChanges());
     }
 }
