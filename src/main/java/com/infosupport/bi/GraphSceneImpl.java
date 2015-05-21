@@ -70,7 +70,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
 
             DestinationWidget destination = (DestinationWidget) addNode(destinationAttrName);
             destination.setPreferredLocation(new Point(xdestination, y));
-            destination.setToolTipText(dataflow.get(i).getDestination().getDbName());
+            destination.setToolTipText("Systeem: " +dataflow.get(i).getDestination().getDbName());
 
             //Maakt koppeling tussen transformatie en bestemming aan
             String transDestConn = "transDest" + y;
@@ -93,7 +93,7 @@ public class GraphSceneImpl extends GraphScene<String, String> {
 
                 SourceWidget source = (SourceWidget) addNode(sourceAttrName);
                 source.setPreferredLocation(new Point(xsource, ySource));
-                source.setToolTipText(sourceAttr.getDbName());
+                source.setToolTipText("Systeem: " + sourceAttr.getDbName());
 
                 String sourceTrans = "sourceTrans" + ySource;
                 this.addEdge(sourceTrans);

@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import junit.framework.Assert;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
@@ -99,7 +100,6 @@ public class DatabaseConnectionTest {
     @Test
     public void testUpdateSource() throws SQLException {
         MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
-        
-      //  mssqlQuery.updateSource(162,343,"Distinct",213,7);
+        assertFalse(mssqlQuery.updateSource(0, 0, null, 0, 0));
     }
 }

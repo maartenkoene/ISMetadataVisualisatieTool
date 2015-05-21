@@ -136,7 +136,7 @@ public class MSSQLQuery {
 
     }
 
-    public void updateSource(int sourceMappingID, int destinationAttrID, String transformation, int sourceAttrID, int mappingSetID) throws SQLException {
+    public boolean updateSource(int sourceMappingID, int destinationAttrID, String transformation, int sourceAttrID, int mappingSetID) throws SQLException {
 
         String deleteMappingRowStatement = "DELETE FROM ISMetadata.ismd.MappingRow WHERE MappingID = ?";
 
@@ -201,10 +201,11 @@ public class MSSQLQuery {
                 preparedInsertMappingSet.executeUpdate();
             }
             connection.commit();
+            return true;
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.toString());
             connection.rollback();
+            return false;
         } finally {
             if (preparedMappingRowDelete != null) {
                 preparedMappingRowDelete.close();
@@ -225,6 +226,7 @@ public class MSSQLQuery {
                 preparedInsertMappingSet.close();
             }
             connection.setAutoCommit(true);
+            
         }
 
     }

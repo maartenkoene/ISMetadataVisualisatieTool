@@ -5,6 +5,7 @@
  */
 package com.infosupport.bi;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,15 +24,31 @@ public class ChangeHandlerTest {
     String oldTrans2;
     int oldDest2;
 
+    int sourceMap3;
+    int destID3;
+    String trans3;
+    int sourceID3;
+    int mappingSet3;
+    String oldTrans3;
+    int oldDest3;
+
     int sourceMapDes2;
     int destIDDes2;
     String newTransDes2;
     String oldTransDes2;
     int oldDestDes2;
 
+    int sourceMapDes3;
+    int destIDDes3;
+    String newTransDes3;
+    String oldTransDes3;
+    int oldDestDes3;
+
     ChangeSource realChangeSource;
+    ChangeSource anotherRealChangeSource;
     ChangeHandler changehandler;
     ChangeDestination realChangeDestination;
+    ChangeDestination anotherRealChangeDestination;
 
     @Before
     public void createVariables() {
@@ -45,12 +62,28 @@ public class ChangeHandlerTest {
         oldDest2 = 500;
         realChangeSource = new ChangeSource(sourceMap2, oldDest2, oldTrans2, sourceID2, mappingSet2, trans2, destID2);
 
+        sourceMap3 = 50;
+        destID3 = 500;
+        trans3 = "Add";
+        sourceID3 = 5;
+        mappingSet3 = 8;
+        oldTrans3 = "verm";
+        oldDest3 = 800;
+        anotherRealChangeSource = new ChangeSource(sourceMap3, oldDest3, oldTrans3, sourceID3, mappingSet3, trans3, destID3);
+
         sourceMapDes2 = 40;
         destIDDes2 = 400;
         newTransDes2 = "no transformation";
         oldTransDes2 = "iets";
         oldDestDes2 = 100;
         realChangeDestination = new ChangeDestination(sourceMapDes2, destIDDes2, newTransDes2, oldTransDes2, oldDestDes2);
+
+        sourceMapDes3 = 50;
+        destIDDes3 = 5000;
+        newTransDes3 = "Distinct";
+        oldTransDes3 = "no transformation";
+        oldDestDes3 = 200;
+        anotherRealChangeDestination = new ChangeDestination(sourceMapDes3, destIDDes3, newTransDes3, oldTransDes3, oldDestDes3);
     }
 
     @Test
@@ -90,10 +123,30 @@ public class ChangeHandlerTest {
         ChangeDestination changeBack = new ChangeDestination(sourceMap1, oldDest, oldTrans, newTrans, destID1);
         changehandler.addChange(changeBack);
         changehandler.addChange(realChangeDestination);
-        
+
         changehandler.removeInverses();
 
         assertTrue(changehandler.getChangesMade().size() == 1);
+
+    }
+
+    @Test
+    public void checkDoubleSourceEntriesShouldBeFalse() {
+        changehandler.addChange(realChangeSource);
+        changehandler.addChange(anotherRealChangeSource);
+
+        changehandler.removeInverses();
+        assertFalse(changehandler.getChangesMade().size() == 1);
+
+    }
+
+    @Test
+    public void checkDoubleDestinationEntriesShouldBeFalse() {
+        changehandler.addChange(realChangeDestination);
+        changehandler.addChange(anotherRealChangeDestination);
+
+        changehandler.removeInverses();
+        assertFalse(changehandler.getChangesMade().size() == 1);
 
     }
 
