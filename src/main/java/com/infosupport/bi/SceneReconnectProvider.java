@@ -87,7 +87,7 @@ public class SceneReconnectProvider implements ReconnectProvider {
             for (Integer integer : trans.getSourcesMappingID()) {
                 ChangeDestination changeDestination = new ChangeDestination(integer.intValue(), dest.getDestinationAttributeID(),
                         trans.getTransformation(), trans.getTransformation(), oldDest.getDestinationAttributeID());
-                changehandler.setChangesList(changeDestination);
+                changehandler.addChange(changeDestination);
             }
 
         } else if (source instanceof SourceWidget && replacement instanceof TransformationWidget) {
@@ -101,7 +101,7 @@ public class SceneReconnectProvider implements ReconnectProvider {
             ChangeSource changeSource = new ChangeSource(origin.getMappingID(), trans.getDestinationAttributeID(),
                     trans.getTransformation(), origin.getSourceAttributeID(), origin.getMappingSetID(), oldTrans.getTransformation(),
                     oldTrans.getDestinationAttributeID());
-            changehandler.setChangesList(changeSource);
+            changehandler.addChange(changeSource);
 
         }
 

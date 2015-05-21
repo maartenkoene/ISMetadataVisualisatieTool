@@ -91,13 +91,21 @@ public class VisualisationField extends JPanel {
             public void actionPerformed(ActionEvent ae) {
                 GraphSceneImpl graphScene = (GraphSceneImpl) scene;
                 ChangeHandler changes = graphScene.getChanges();
-                changes.checkDoubleEntries();
-                boolean saved = changes.savesChanges();
-
-                if (saved) {
-                    JOptionPane.showMessageDialog(null, "De wijzigingen zijn opgeslagen", "Opgeslagen", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "De gemaakte wijzigingen veroorzaken conflicten. \nDe wijzigingen zijn niet opgeslagen en worden ongedaan gemaakt", "Syntax fout", JOptionPane.ERROR_MESSAGE);
+                changes.removeInverses();
+                
+                switch (changes.savesChanges()){
+                    case NO_CHANGE: { 
+                        JOptionPane.showMessageDialog(null, "Er zijn geen wijzingen of alleen ongedane wijzigingen", "Info", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    }
+                    case SYNTAX: {
+                        JOptionPane.showMessageDialog(null, "De gemaakte wijzigingen veroorzaken conflicten. \nDe wijzigingen zijn niet opgeslagen en worden ongedaan gemaakt.\n Er kunnen geen bronnen en bewerkingen tegelijk worden aangepast", "Syntax fout", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
+                    case SUCCESSFULL: {
+                        JOptionPane.showMessageDialog(null, "De wijzigingen zijn opgeslagen", "Opgeslagen", JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    }
                 }
 
                 ComboboxItem datamodel = (ComboboxItem) systems.getSelectedItem();

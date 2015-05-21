@@ -6,7 +6,6 @@
 package com.infosupport.bi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,6 +15,7 @@ import java.util.List;
 public class ChangeHandler {
 
     private MSSQLQuery queryhandler;
+    private List<Change> changesMade = new ArrayList<Change>();
 
     public ChangeHandler() {
     }
@@ -24,101 +24,81 @@ public class ChangeHandler {
         queryhandler = new MSSQLQuery(dbString, username, password);
     }
 
-    private List<Object> changesList = new ArrayList<Object>();
+    public void removeInverses() {
 
-    public void setChangesList(Object o) {
-        this.changesList.add(o);
-    }
+        List<Change> inverses = new ArrayList<Change>();
 
-    public List<Object> getChangesList() {
-        return changesList;
-    }
-
-    public void checkDoubleEntries() {
-
-        for (int i = 0; i < changesList.size(); i++) {
-            if (changesList.get(i) instanceof ChangeSource) {
-                ChangeSource originalSourceCheck = (ChangeSource) changesList.get(i);
-                for (int j = 0; j < changesList.size(); j++) {
-                    if (changesList.get(j) instanceof ChangeSource) {
-                        ChangeSource compareSourceCheck = (ChangeSource) changesList.get(j);
-                        if (compareSourceCheck.compareDestinations(originalSourceCheck.getDestinationAttrID(), originalSourceCheck.getTransformation(),
-                                originalSourceCheck.getOldDestination(), originalSourceCheck.getOldTransformation(), originalSourceCheck.getSourceMappingID())) {
-                            changesList.set(i, null);
-                            changesList.set(j, null);
-                            break;
-                        }
-                    }
-                }
-
-            } else if (changesList.get(i) instanceof ChangeDestination) {
-                ChangeDestination originalDestinationCheck = (ChangeDestination) changesList.get(i);
-                for (int k = 0; k < changesList.size(); k++) {
-                    if (changesList.get(k) instanceof ChangeDestination) {
-                        ChangeDestination compareDestinationCheck = (ChangeDestination) changesList.get(k);
-                        if (compareDestinationCheck.compareDestinations(originalDestinationCheck.getDestinationAttrID(), originalDestinationCheck.getTransformation(),
-                                originalDestinationCheck.getOldDestinationAttrID(), originalDestinationCheck.getOldTransformation())) {
-                            changesList.set(i, null);
-                            changesList.set(k, null);
-                            break;
-                        }
-                    }
+        for (Change change : changesMade) {
+            for (Change candidate : changesMade) {
+                if (change != candidate && change.inverse(candidate)) {
+                    inverses.add(change);
                 }
             }
         }
-        changesList.removeAll(Collections.singleton(null));
+        changesMade.removeAll(inverses);
     }
 
-    public boolean savesChanges() {
-        boolean saved = false;
+    public void addChange(Change c) {
+        this.changesMade.add(c);
+    }
+
+    public List<Change> getChangesMade() {
+        return changesMade;
+    }
+
+    public SaveState savesChanges() {
+        SaveState saved = SaveState.NO_CHANGE;
         boolean sourceChangeFound = false;
         boolean destinationChangeFound = false;
 
-        for (Object object : changesList) {
-            if (object instanceof ChangeSource) {
+        for (Change change : changesMade) {
+            if (change instanceof ChangeSource) {
                 sourceChangeFound = true;
-            } else if (object instanceof ChangeDestination) {
+            } else if (change instanceof ChangeDestination) {
                 destinationChangeFound = true;
             }
         }
 
         if (sourceChangeFound == true && destinationChangeFound == true) {
-            
-            return saved;
+            return SaveState.SYNTAX;
+        } else if (changesMade.isEmpty()) {
+            return SaveState.NO_CHANGE;
         } else {
 
-            for (Object object : changesList) {
-                if (object instanceof ChangeSource) {
-                    ChangeSource change = (ChangeSource) object;
-                    String transWithId = change.getTransformation();
+            for (Change change : changesMade) {
+                if (change instanceof ChangeSource) {
+                    ChangeSource changeSource = (ChangeSource) change;
+                    String transWithId = changeSource.getTransformation();
                     String[] parts = transWithId.split(" id:");
                     String transformation = parts[0];
 
                     try {
                         if (transformation.equals("No transformation")) {
-                            queryhandler.updateSource(change.getSourceMappingID(), change.getDestinationAttrID(), null,
-                                    change.getSourceAttrID(), change.getMappingSetID());
+                            queryhandler.updateSource(changeSource.getSourceMappingID(), changeSource.getDestinationAttrID(), null,
+                                    changeSource.getSourceAttrID(), changeSource.getMappingSetID());
                         } else {
-                            queryhandler.updateSource(change.getSourceMappingID(), change.getDestinationAttrID(), transformation,
-                                    change.getSourceAttrID(), change.getMappingSetID());
+                            queryhandler.updateSource(changeSource.getSourceMappingID(), changeSource.getDestinationAttrID(), transformation,
+                                    changeSource.getSourceAttrID(), changeSource.getMappingSetID());
                         }
-                        saved = true;
+                        saved = SaveState.SUCCESSFULL;
                     } catch (Exception e) {
-                        saved = false;
+                        saved = SaveState.SYNTAX;
                     }
-                } else if (object instanceof ChangeDestination) {
-                    ChangeDestination change = (ChangeDestination) object;
-                    String transWithdId = change.getTransformation();
+                } else if (change instanceof ChangeDestination) {
+                    ChangeDestination changeDestination = (ChangeDestination) change;
+                    String transWithdId = changeDestination.getTransformation();
                     String[] parts = transWithdId.split(" id:");
                     String transformation = parts[0];
                     try {
                         if (transformation.equals("No transformation")) {
-                            queryhandler.updateDestination(change.getSourceMappingID(), change.getDestinationAttrID(), null);
+                            queryhandler.updateDestination(changeDestination.getSourceMappingID(), changeDestination.getDestinationAttrID(), null);
+                            saved = SaveState.SUCCESSFULL;
                         } else {
-                            queryhandler.updateDestination(change.getSourceMappingID(), change.getDestinationAttrID(), transformation);
+                            queryhandler.updateDestination(changeDestination.getSourceMappingID(), changeDestination.getDestinationAttrID(), transformation);
+                            saved = SaveState.SUCCESSFULL;
                         }
                     } catch (Exception e) {
-                        saved = false;
+                        saved = SaveState.SYNTAX;
                     }
                 }
             }

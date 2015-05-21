@@ -5,7 +5,6 @@
  */
 package com.infosupport.bi;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -66,15 +65,15 @@ public class ChangeHandlerTest {
         int oldDest1 = 200;
 
         ChangeSource firstSourceEntry = new ChangeSource(sourceMap1, destID1, trans1, sourceID1, mappingSet1, oldTrans1, oldDest1);
-        changehandler.setChangesList(firstSourceEntry);
+        changehandler.addChange(firstSourceEntry);
         ChangeSource changeBack = new ChangeSource(sourceMap1, oldDest1, oldTrans1, sourceID1, mappingSet1, trans1, destID1);
-        changehandler.setChangesList(changeBack);
+        changehandler.addChange(changeBack);
 
-        changehandler.setChangesList(realChangeSource);
+        changehandler.addChange(realChangeSource);
 
-        changehandler.checkDoubleEntries();
+        changehandler.removeInverses();
 
-        assertTrue(changehandler.getChangesList().size() == 1);
+        assertTrue(changehandler.getChangesMade().size() == 1);
     }
 
     @Test
@@ -87,43 +86,38 @@ public class ChangeHandlerTest {
         int oldDest = 100;
 
         ChangeDestination firstDestinationEntry = new ChangeDestination(sourceMap1, destID1, newTrans, oldTrans, oldDest);
-        changehandler.setChangesList(firstDestinationEntry);
+        changehandler.addChange(firstDestinationEntry);
         ChangeDestination changeBack = new ChangeDestination(sourceMap1, oldDest, oldTrans, newTrans, destID1);
-        changehandler.setChangesList(changeBack);
-        changehandler.setChangesList(realChangeDestination);
+        changehandler.addChange(changeBack);
+        changehandler.addChange(realChangeDestination);
+        
+        changehandler.removeInverses();
 
-        changehandler.checkDoubleEntries();
-
-        assertTrue(changehandler.getChangesList().size() == 1);
+        assertTrue(changehandler.getChangesMade().size() == 1);
 
     }
 
     @Test
-    public void savesChangesShouldBeFalse() {
+    public void savesChangesShouldBeTrue() {
 
-        assertFalse(changehandler.savesChanges());
+        assertTrue(changehandler.savesChanges() == SaveState.NO_CHANGE);
     }
 
     @Test
-    public void changesListShouldBeTrue() {
-        int sourceMap1 = 20;
-        int destID1 = 200;
-        String newTrans = "no transformation";
-        String oldTrans = "verm";
-        int oldDest = 100;
+    public void changesCantBeSaved() {
 
-        ChangeDestination firstDestinationEntry = new ChangeDestination(sourceMap1, destID1, newTrans, oldTrans, oldDest);
-        changehandler.setChangesList(firstDestinationEntry);
-
-        assertTrue(changehandler.getChangesList().size() == 1);
-    }
-    
-    @Test
-    public void changesCantBeSaved(){
-    
-        changehandler.setChangesList(realChangeDestination);
-        changehandler.setChangesList(realChangeSource);
+        changehandler.addChange(realChangeDestination);
+        changehandler.addChange(realChangeSource);
         changehandler.savesChanges();
-        assertFalse(changehandler.savesChanges());
+        assertTrue(changehandler.savesChanges() == SaveState.SYNTAX);
+    }
+
+    @Test
+    public void addChanges() {
+        changehandler.addChange(realChangeSource);
+        changehandler.addChange(realChangeDestination);
+
+        assertTrue(changehandler.getChangesMade().size() == 2);
+
     }
 }

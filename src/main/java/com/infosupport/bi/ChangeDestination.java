@@ -9,7 +9,7 @@ package com.infosupport.bi;
  *
  * @author MaartenKo
  */
-public class ChangeDestination {
+public class ChangeDestination implements Change {
 
     private final int sourceMappingID;
     private final int destinationAttrID;
@@ -24,14 +24,6 @@ public class ChangeDestination {
         this.transformation = transformation;
         this.oldTransformation = oldTransformation;
         this.oldDestinationAttrID = oldDestinationAttrID;
-    }
-
-    public boolean compareDestinations(int newDestinationID, String newTransformation, int previousDestination, String previousTransformation) {
-        if (oldDestinationAttrID == newDestinationID && oldTransformation.equals(newTransformation) && destinationAttrID == previousDestination && transformation.equals(previousTransformation)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public int getSourceMappingID() {
@@ -52,6 +44,15 @@ public class ChangeDestination {
 
     public int getOldDestinationAttrID() {
         return oldDestinationAttrID;
+    }
+
+    public boolean inverse(Change candidate) {
+        if (candidate instanceof ChangeDestination) {
+            ChangeDestination castCandidate = (ChangeDestination) candidate;
+            return (castCandidate.destinationAttrID == this.oldDestinationAttrID && castCandidate.transformation.equals(this.oldTransformation) && castCandidate.oldDestinationAttrID == this.destinationAttrID && castCandidate.oldTransformation.equals(this.transformation));
+        } else {
+            return false;
+        }
     }
 
 }
