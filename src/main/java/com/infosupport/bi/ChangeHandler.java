@@ -31,7 +31,9 @@ public class ChangeHandler {
         for (Change change : changesMade) {
             for (Change candidate : changesMade) {
                 if (change != candidate && change.inverse(candidate)) {
-                    inverses.add(change);
+                    if (!inverses.contains(change)) {
+                        inverses.add(change);
+                    }
                 }
             }
         }
