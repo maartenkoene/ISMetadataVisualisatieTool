@@ -9,8 +9,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import junit.framework.Assert;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,6 +25,7 @@ public class DatabaseConnectionTest {
     private String password;
     private int dataModelId;
     private int mappingSetId;
+    private int expectedSize;
 
     @Before
     public void databaseVariables() {
@@ -33,6 +34,8 @@ public class DatabaseConnectionTest {
         password = "Info2015";
         dataModelId = 5;
         mappingSetId = 1;
+        expectedSize = 40;
+        
     }
 
     @Test
@@ -80,26 +83,27 @@ public class DatabaseConnectionTest {
     }
 
     @Test
-    public void testGetMappings() {
+    public void testGetMappings() throws SQLException {
         MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
 
         ResultSet rs = mssqlQuery.getMappings(mappingSetId);
+        int size = 0;
 
         try {
             while (rs.next()) {
-                //    System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
+                size++;
+                    System.out.println(rs.getString(9) + " " + rs.getString(6) + " " + rs.getString(3));
             }
         } catch (Exception e) {
             Assert.fail("Query faalt");
         }
-
-        assertNotNull("Geen mappings opgehaald", rs);
+        assertTrue(size == expectedSize);
 
     }
 
     @Test
     public void testUpdateSource() throws SQLException {
         MSSQLQuery mssqlQuery = new MSSQLQuery(connect, username, password);
-        assertFalse(mssqlQuery.updateSource(0, 0, null, 0, 0));
+        //    assertFalse(mssqlQuery.updateSource(0, 0, null));
     }
 }

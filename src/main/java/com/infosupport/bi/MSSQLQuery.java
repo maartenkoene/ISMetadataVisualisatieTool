@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
@@ -116,11 +115,12 @@ public class MSSQLQuery {
         return rs;
     }
 
-    public void updateDestination(int sourceMappingID, int destinationAttrID, String transformationString) {
+    public void updateDestination(int sourceMappingID, int destinationAttrID, String transformationString) throws SQLException {
 
-        PreparedStatement statement;
+        PreparedStatement statement = null;
 
         try {
+            connection.setAutoCommit(false);
             statement = connection.prepareStatement("UPDATE ISMetadata.ismd.Mapping SET [DestinationAttributeID] = ?, [Transformation] = ? WHERE [MappingID] = ? ");
 
             statement.setInt(1, destinationAttrID);
@@ -128,105 +128,47 @@ public class MSSQLQuery {
             statement.setInt(3, sourceMappingID);
 
             statement.executeUpdate();
+            connection.commit();
 
         } catch (Exception e) {
+            connection.rollback();
             JOptionPane.showMessageDialog(null, e.toString());
             System.out.println("Kan geen bestemming updaten");
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            connection.setAutoCommit(true);
         }
 
     }
 
-    public boolean updateSource(int sourceMappingID, int destinationAttrID, String transformation, int sourceAttrID, int mappingSetID) throws SQLException {
+    public boolean updateSource(int sourceMappingID, int destinationAttrID, String transformation) throws SQLException {
 
-        String deleteMappingRowStatement = "DELETE FROM ISMetadata.ismd.MappingRow WHERE MappingID = ?";
-
-        String deleteMappingSetRow = "DELETE FROM ISMetadata.ismd.MappingMappingSet WHERE MappingID = ? AND MappingSetID = ?";
-
-        String deleteMappingStatement = "DELETE FROM ISMetadata.ismd.Mapping WHERE MappingID = ?";
-
-        String insertDestinationStatement = "INSERT INTO ISMetadata.ismd.Mapping ([DestinationAttributeID],"
-                + "[Transformation],[Name]) VALUES (?,?, null)";
-
-        String insertSourceStatement = "INSERT INTO ISMetadata.ismd.MappingRow "
-                + "([MappingID],[SourceAttributeID],[ParameterNumber]) "
-                + "VALUES (?,?, '1')";
-
-        String insertMappingSet = "INSERT INTO ISMetadata.ismd.MappingMappingSet "
-                + "([MappingID], [MappingSetID]) "
-                + "VALUES (?, ?)";
-
-        PreparedStatement preparedMappingRowDelete = null;
-        PreparedStatement preparedMappingSetDelete = null;
-        PreparedStatement preparedMappingDelete = null;
-        PreparedStatement preparedInsertDestination = null;
-        PreparedStatement preparedInsertSource = null;
-        PreparedStatement preparedInsertMappingSet = null;
+        PreparedStatement statement = null;
 
         try {
             connection.setAutoCommit(false);
-            //Oude mappings verwijderen
-            preparedMappingRowDelete = connection.prepareStatement(deleteMappingRowStatement);
-            preparedMappingRowDelete.setInt(1, sourceMappingID);
-            preparedMappingRowDelete.executeUpdate();
+            statement = connection.prepareStatement("UPDATE ISMetadata.ismd.Mapping SET [DestinationAttributeID] = ?, [Transformation] = ? WHERE [MappingID] = ? ");
 
-            preparedMappingSetDelete = connection.prepareStatement(deleteMappingSetRow);
-            preparedMappingSetDelete.setInt(1, sourceMappingID);
-            preparedMappingSetDelete.setInt(2, mappingSetID);
-            preparedMappingSetDelete.executeUpdate();
+            statement.setInt(1, destinationAttrID);
+            statement.setString(2, transformation);
+            statement.setInt(3, sourceMappingID);
 
-            preparedMappingDelete = connection.prepareStatement(deleteMappingStatement);
-            preparedMappingDelete.setInt(1, sourceMappingID);
-            preparedMappingDelete.executeUpdate();
-
-            //van deze de key terugkrijgen
-            preparedInsertDestination = connection.prepareStatement(insertDestinationStatement, Statement.RETURN_GENERATED_KEYS);
-            preparedInsertDestination.setInt(1, destinationAttrID);
-            preparedInsertDestination.setString(2, transformation);
-            preparedInsertDestination.executeUpdate();
-            ResultSet keys = preparedInsertDestination.getGeneratedKeys();
-
-            int mappingID = -1;
-            while (keys.next()) {
-                mappingID = keys.getInt(1);
-            }
-            if (mappingID != -1) {
-                preparedInsertSource = connection.prepareStatement(insertSourceStatement);
-                preparedInsertSource.setInt(1, mappingID);
-                preparedInsertSource.setInt(2, sourceAttrID);
-                preparedInsertSource.executeUpdate();
-
-                preparedInsertMappingSet = connection.prepareStatement(insertMappingSet);
-                preparedInsertMappingSet.setInt(1, mappingID);
-                preparedInsertMappingSet.setInt(2, mappingSetID);
-                preparedInsertMappingSet.executeUpdate();
-            }
+            statement.executeUpdate();
             connection.commit();
             return true;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             connection.rollback();
+            JOptionPane.showMessageDialog(null, e.toString());
+            System.out.println("Kan geen bestemming updaten");
             return false;
         } finally {
-            if (preparedMappingRowDelete != null) {
-                preparedMappingRowDelete.close();
-            }
-            if (preparedMappingSetDelete != null) {
-                preparedMappingSetDelete.close();
-            }
-            if (preparedMappingDelete != null) {
-                preparedMappingDelete.close();
-            }
-            if (preparedInsertDestination != null) {
-                preparedInsertDestination.close();
-            }
-            if (preparedInsertSource != null) {
-                preparedInsertSource.close();
-            }
-            if (preparedInsertMappingSet != null) {
-                preparedInsertMappingSet.close();
+            if (statement != null) {
+                statement.close();
             }
             connection.setAutoCommit(true);
-            
         }
 
     }

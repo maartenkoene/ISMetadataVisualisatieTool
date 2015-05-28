@@ -76,11 +76,9 @@ public class ChangeHandler {
 
                     try {
                         if (transformation.equals("No transformation")) {
-                            queryhandler.updateSource(changeSource.getSourceMappingID(), changeSource.getDestinationAttrID(), null,
-                                    changeSource.getSourceAttrID(), changeSource.getMappingSetID());
+                            queryhandler.updateSource(changeSource.getSourceMappingID(), changeSource.getDestinationAttrID(), null);
                         } else {
-                            queryhandler.updateSource(changeSource.getSourceMappingID(), changeSource.getDestinationAttrID(), transformation,
-                                    changeSource.getSourceAttrID(), changeSource.getMappingSetID());
+                            queryhandler.updateSource(changeSource.getSourceMappingID(), changeSource.getDestinationAttrID(), transformation);
                         }
                         saved = SaveState.SUCCESSFULL;
                     } catch (Exception e) {
