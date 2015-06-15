@@ -25,6 +25,10 @@ public class MSSQLQuery {
         connection = connect.dbConnect();
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     public ResultSet getSystems() {
 
         PreparedStatement statement;
